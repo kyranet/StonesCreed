@@ -1,6 +1,6 @@
 'use strict';
 
-  var PlayScene = {
+var PlayScene = {
   create: function () {
     var logo = this.game.add.sprite(
       this.game.world.centerX, this.game.world.centerY, 'logo');
