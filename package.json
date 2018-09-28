@@ -22,6 +22,9 @@
     "vinyl-source-stream": "^2.0.0",
     "watchify": "^3.11.0"
   },
+  "devDependencies": {
+    "http-server": "^0.11.1"
+  },
   "keywords": [
     "phaser",
     "videogame",
