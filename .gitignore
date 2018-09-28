@@ -1,6 +1,8 @@
 node_modules
 
+.publish
 .tmp
 dist
-.publish
 gulp.config.json
+package-lock.json
+yarn.lock

@@ -1,7 +1,7 @@
-# Awesome game
+# Creed Stones
 
 Awesome game by
-[gituser](https://github.com/gituser).
+[gituser](https://github.com/kyranet).
 
 Initial scaffolding generated with [generator-gamejam](https://github.com/belen-albeza/generator-gamejam/).
 
@@ -22,8 +22,8 @@ npm install -g gulp
 Clone this repository and install dependencies:
 
 ```
-git clone gituser/awesome-game
-cd awesome-game
+git clone kyranet/CreedStones
+cd CreedStones
 npm install
 ```
 
@@ -56,13 +56,8 @@ There is a task that will automatically run Browserify when a JavaScript file ch
 gulp run
 ```
 
-
-
-
-
 You can deploy to **Github Pages** with the `deploy:ghpages` task, which will build the project and then push the `dist` folder in the `gh-pages` branch.
 
 ```
 gulp deploy:ghpages
 ```
-
