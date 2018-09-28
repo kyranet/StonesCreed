@@ -23,6 +23,8 @@
     "watchify": "^3.11.0"
   },
   "devDependencies": {
+    "eslint-config-klasa": "github:dirigeants/klasa-lint",
+    "eslint": "^5.5.0",
     "http-server": "^0.11.1"
   },
   "keywords": [
