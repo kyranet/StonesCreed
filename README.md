@@ -1,7 +1,7 @@
 # Creed Stones
 
 Awesome game by
-[gituser](https://github.com/kyranet).
+[kyranet](https://github.com/kyranet) and [CarlosMGM](https://github.com/CarlosMGM).
 
 Initial scaffolding generated with [generator-gamejam](https://github.com/belen-albeza/generator-gamejam/).
 
