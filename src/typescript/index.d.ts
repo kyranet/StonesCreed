@@ -1,11 +1,11 @@
 import { Sprite } from 'phaser';
 
 declare type CharacterState = 'run' | 'walk' | 'stand';
+declare type Direction = 'up' | 'down' | 'right' | 'left';
 
 declare class Character extends Sprite {
 	walkSpeed: number;
-	runSpeed: number;
-	direction: 'up' | 'down' | 'right' | 'left';
+	runSpeed: number;ç
 	state: CharacterState;
 
 	/**
@@ -32,14 +32,16 @@ declare class Player extends Character {
 	state: PlayerState;
 
 	/**
-	 * Hides the player, sets this.state to 'hidden'
+	 * Hides the player, sets this.state to 'hidden' and displays the animation corresponding to
+	 * the hiding type.
 	 */
-	hide(): void;
+	hide(hidingType: HidingType): void;
+	interact(sprite: Sprite): void;
 }
 
-declare type EnemyState = PlayerState | 'routing' | 'pursuit';
+declare type EnemyState = CharacterState | 'onRoute' | 'pursuit';
 
-declare class Enemy extends Player {
+declare class Enemy extends Character {
 	/**
 	 * Array of (x, y) positions.
 	 * @example [[x, y], [x, y], [x, y]]
@@ -62,4 +64,45 @@ declare class Enemy extends Player {
 	 * within attack distance from the player, call this.attack(player).
 	 */
 	chase(): void;
+}
+
+declare class Target extends Enemy {
+	/**
+	 * Special enemy. A level is completed when all targets are killed.
+	 * 
+	 */
+}
+
+declare type HidingType = 'haystack' | 'cave' | 'bushes'
+
+/**
+ * An object that can be found sparced around the map. A Player hidden inside
+ * cannot be seen by enemies.  
+ */
+
+declare class HidingSpot extends Sprite {
+
+	/**
+	 * The type of hiding spot. 
+	 */
+	type: HidingType;
+}
+
+declare class Trap extends Sprite {
+	active: boolean;
+
+	/**
+	 * The trap will kill the given character. This methot will only be called when 'active' is true
+	 * and collides with a Character.
+	 */
+	kill(character: Character): void;
+}
+
+declare class Boulder extends Trap {
+	direction: Direction;
+
+	/**
+	 * While 'active' is true, the Boulder will move in a set Direction until it collides with a wall.
+	 */
+	move(dir: Direction) : void;
 }
