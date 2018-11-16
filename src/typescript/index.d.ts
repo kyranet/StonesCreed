@@ -5,7 +5,7 @@ declare type Direction = 'up' | 'down' | 'right' | 'left';
 
 declare class Character extends Sprite {
 	walkSpeed: number;
-	runSpeed: number;ç
+	runSpeed: number;
 	state: CharacterState;
 
 	/**
