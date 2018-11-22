@@ -23,6 +23,11 @@ declare class Character extends Sprite {
 	 * Sets this.state to 'run'.
 	 */
 	run(): void;
+
+	/**
+	 * Sets this.state to 'stand'
+	 */
+	stand(): void;
 }
 
 declare type PlayerState = CharacterState | 'hidden';
@@ -57,6 +62,11 @@ declare class Enemy extends Character {
 	pov: number;
 
 	/**
+	 * Whether or not this is the target
+	 */
+	isTarget: number;
+
+	/**
 	 * Calculates best route to chase the character finding the player, for which
 	 * will change to 'pursuit'. If the player dissapears, the Enemy will go to
 	 * the last known position. After 2 seconds, this.state changes to 'routing'
@@ -66,29 +76,27 @@ declare class Enemy extends Character {
 	chase(): void;
 }
 
-declare class Target extends Enemy {
-	/**
-	 * Special enemy. A level is completed when all targets are killed.
-	 * 
-	 */
-}
-
 declare type HidingType = 'haystack' | 'cave' | 'bushes'
 
 /**
  * An object that can be found sparced around the map. A Player hidden inside
- * cannot be seen by enemies.  
+ * cannot be seen by enemies.
  */
 
 declare class HidingSpot extends Sprite {
 
+	constructor(type: HidingType);
+
 	/**
-	 * The type of hiding spot. 
+	 * The type of hiding spot.
 	 */
 	type: HidingType;
 }
 
 declare class Trap extends Sprite {
+
+	constructor(active: boolean);
+
 	active: boolean;
 
 	/**
