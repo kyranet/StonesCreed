@@ -4,19 +4,19 @@ var PlayScene = require('./play_scene.js');
 
 
 var BootScene = {
-	preload() {
+	preload: function preload() {
 		// load here assets required for the loading screen
 		this.game.load.image('preloader_bar', 'images/preloader_bar.png');
 	},
 
-	create() {
+	create: function create() {
 		this.game.state.start('preloader');
 	}
 };
 
 
 var PreloaderScene = {
-	preload() {
+	preload: function preload() {
 		this.loadingBar = this.game.add.sprite(0, 240, 'preloader_bar');
 		this.loadingBar.anchor.setTo(0, 0.5);
 		this.load.setPreloadSprite(this.loadingBar);
@@ -25,7 +25,7 @@ var PreloaderScene = {
 		this.game.load.image('logo', 'images/phaser.png');
 	},
 
-	create() {
+	create: function create() {
 		this.game.state.start('play');
 	}
 };

@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "Browser videogame built with gulp, browserify, and phaser.js",
   "scripts": {
-    "test": "echo OK"
+    "test": "eslint src",
+    "lint": "eslint src --fix"
   },
   "repository": {
     "type": "git",
