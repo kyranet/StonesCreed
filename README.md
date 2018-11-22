@@ -1,9 +1,10 @@
-# Creed Stones
+# Stone's Creed <img src="src/images/StonesCreed.png" align="right" width="30%">
 
 Awesome game by
 [kyranet](https://github.com/kyranet) and [CarlosMGM](https://github.com/CarlosMGM).
 
-Initial scaffolding generated with [generator-gamejam](https://github.com/belen-albeza/generator-gamejam/).
+What would happen if Assassin's Creed were based in the stone age?
+We shall discover it with this game based on Phaser.js!
 
 ## Installation
 
