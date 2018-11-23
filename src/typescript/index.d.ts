@@ -1,12 +1,13 @@
 import { Sprite } from 'phaser';
 
-declare type CharacterState = 'run' | 'walk' | 'stand';
+declare type CharacterState = 'run' | 'walk' | 'stand' | 'dead';
 declare type Direction = 'up' | 'down' | 'right' | 'left';
 
 declare class Character extends Sprite {
 	walkSpeed: number;
 	runSpeed: number;
 	state: CharacterState;
+	direction: Direction;
 
 	/**
 	 * Try to attack a character.
@@ -28,6 +29,8 @@ declare class Character extends Sprite {
 	 * Sets this.state to 'stand'
 	 */
 	stand(): void;
+
+	changeDirection(direction: Direction): void;
 }
 
 declare type PlayerState = CharacterState | 'hidden';
