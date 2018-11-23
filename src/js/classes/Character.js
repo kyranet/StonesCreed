@@ -6,7 +6,7 @@ function Character() {
 	this.runSpeed = 0;
 	this.state = 'stand';
 	this.direction = 'down'
-	game.physics.enable(object);
+	this.game.physics.enable(this);
 }
 
 Character.prototype = Object.create(Sprite.prototype);
@@ -14,39 +14,26 @@ Character.prototype.constructor = Character;
 
 Character.prototype.attack = function attack(character) {
 	if (!(character instanceof Character)) throw new TypeError('Expected a character');
-	this.state = 'dead';
+	character.state = 'dead';
 };
 
 Character.prototype.walk = function walk() {
 	this.state = 'walk';
-	if(this.direction =='down'){
-		this.body.velocity.y = this.walkSpeed;
+	switch (this.direction) {
+		case 'down': this.body.velocity.y = this.walkSpeed; break;
+		case 'up': this.body.velocity.y = -this.walkSpeed; break;
+		case 'left': this.body.velocity.x = -this.walkSpeed; break;
+		case 'right': this.body.velocity.x = this.walkSpeed; break;
 	}
-	if(this.direction =='up'){
-		this.body.velocity.y = -this.walkSpeed;
-	}
-	if(this.direction =='left'){
-		this.body.velocity.x = -this.walkSpeed;
-	}
-	if(this.direction =='right'){
-		this.body.velocity.x = this.walkSpeed;
-	}
-
 };
 
 Character.prototype.run = function run() {
 	this.state = 'run';
-	if(this.direction =='down'){
-		this.body.velocity.y = this.runSpeed;
-	}
-	if(this.direction =='up'){
-		this.body.velocity.y = -this.runSpeed;
-	}
-	if(this.direction =='left'){
-		this.body.velocity.x = -this.runSpeed;
-	}
-	if(this.direction =='right'){
-		this.body.velocity.x = this.runSpeed;
+	switch (this.direction) {
+		case 'down': this.body.velocity.y = this.runSpeed; break;
+		case 'up': this.body.velocity.y = -this.runSpeed; break;
+		case 'left': this.body.velocity.x = -this.runSpeed; break;
+		case 'right': this.body.velocity.x = this.runSpeed; break;
 	}
 };
 
@@ -56,23 +43,22 @@ Character.prototype.stand = function stand() {
 	this.body.velocity.y = 0;
 };
 
-Character.prototype.update = function update() {
-	Sprite.prototype.update.call(this);
-	switch(this.state){
-		case 'stand':
-		break;
-		case 'walking':
-		break;
-		case 'running':
-		break;
-	}
-}
-
-Character.prototype.changeDirection = function changeDirection(direction){
-	if (!(direction instanceof String)) throw new TypeError('Expected a string');
-	if (!(direction != 'up' && direction != 'down' && direction != 'left') && direction != 'right') throw new Error('Expected a direction');
-
+Character.prototype.changeDirection = function changeDirection(direction) {
+	if (typeof direction !== 'string') throw new TypeError('Expected a string');
+	if (!['up', 'down', 'left', 'right'].includes(direction)) throw new Error('Expected a direction');
 	this.direction = direction;
 }
+
+// Character.prototype.update = function update() {
+// 	Sprite.prototype.update.call(this);
+// 	switch(this.state){
+// 		case 'stand':
+// 		break;
+// 		case 'walking':
+// 		break;
+// 		case 'running':
+// 		break;
+// 	}
+// }
 
 module.exports = Character;
