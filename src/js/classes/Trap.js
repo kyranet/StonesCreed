@@ -11,8 +11,7 @@ Trap.prototype.constructor = Trap;
 
 Trap.prototype.kill = function kill(character) {
 	if (!(character instanceof Character)) throw new TypeError('Expected a character');
-	// TODO: How do we kill a character?
-	// Perhaps add Character#kill?
+	character.state = 'dead';
 }
 
 module.exports = Trap;
