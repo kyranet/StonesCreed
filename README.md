@@ -16,22 +16,22 @@ cd CreedStones
 npm install
 ```
 
-To **build** the game, run the `dist` task from the project root:
+To **build** the game, run the `build` task from the project root:
 
 ```
-npx gulp dist
+npx gulp build
 ```
 
 The `dist` folder will contain a build of the game. You can then start a local server that serves this directory statically to play the game in local:
 
 ```
-npx http-server dist
+npx http-server build
 ```
 
-You can **clean up** the temporary files and the `dist` folder by running:
+You can **clean up** the temporary files and the `build` folder by running:
 
 ```
-npx gulp clean
+npx gulp cleanBuild
 ```
 
 ## Development

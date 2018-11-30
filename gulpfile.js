@@ -6,8 +6,6 @@ var gutil = require('gulp-util');
 var source = require('vinyl-source-stream');
 var buffer = require('gulp-buffer');
 var uglify = require('gulp-uglify');
-var gulpif = require('gulp-if');
-var exorcist = require('exorcist');
 var babelify = require('babelify');
 var browserify = require('browserify');
 var browserSync = require('browser-sync');
@@ -21,7 +19,7 @@ var SCRIPTS_PATH = BUILD_PATH + '/src/js';
 var SOURCE_PATH = './src';
 var STATIC_PATH = './static';
 var ENTRY_FILE = SOURCE_PATH + '/js/main.js';
-var OUTPUT_FILE = 'game.js';
+var OUTPUT_FILE = 'bundle.min.js';
 
 var keepFiles = false;
 
@@ -99,8 +97,6 @@ function copyPhaser() {
  * but have different task dependencies.
  */
 function build() {
-
-  var sourcemapPath = SCRIPTS_PATH + '/' + OUTPUT_FILE + '.map';
   logBuildMode();
 
   return browserify({
@@ -120,10 +116,9 @@ function build() {
       gutil.log(gutil.colors.red('[Build Error]', error.message));
       this.emit('end');
     })
-    .pipe(gulpif(!isProduction(), exorcist(sourcemapPath)))
     .pipe(source(OUTPUT_FILE))
     .pipe(buffer())
-    .pipe(gulpif(isProduction(), uglify()))
+    .pipe(uglify())
     .pipe(gulp.dest(SCRIPTS_PATH));
 
 }
@@ -162,6 +157,7 @@ gulp.task('fastBuild', build);
 gulp.task('serve', ['build'], serve);
 gulp.task('watch-js', ['fastBuild'], browserSync.reload); // Rebuilds and reloads the project when executed.
 gulp.task('watch-static', ['copyPhaser'], browserSync.reload);
+gulp.task('run', ['serve']);
 
 /**
  * The tasks are executed in the following order:
@@ -170,4 +166,4 @@ gulp.task('watch-static', ['copyPhaser'], browserSync.reload);
  * Read more about task dependencies in Gulp:
  * https://medium.com/@dave_lunny/task-dependencies-in-gulp-b885c1ab48f0
  */
-gulp.task('default', ['serve']);
+gulp.task('default', ['run']);
