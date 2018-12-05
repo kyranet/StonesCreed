@@ -4,7 +4,16 @@
   "description": "Browser videogame built with gulp, browserify, and phaser.js",
   "scripts": {
     "test": "eslint src",
-    "lint": "eslint src --fix"
+    "lint": "eslint src --fix",
+    "cleanBuild": "npx gulp cleanBuild",
+    "copyStatic": "npx gulp copyStatic",
+    "copyPhaser": "npx gulp copyPhaser",
+    "build": "npx gulp build",
+    "fastBuild": "npx gulp fastBuild",
+    "serve": "npx gulp serve",
+    "watch-js": "npx gulp watch-js",
+    "watch-static": "npx gulp watch-static",
+    "run": "npx gulp run"
   },
   "repository": {
     "type": "git",
