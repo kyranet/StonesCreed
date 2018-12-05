@@ -17,6 +17,9 @@
 	},
 	"globals": {
 		"Phaser": true,
-		"window": true
+		"window": true,
+		"PIXI": true,
+		"p2": true,
+		"CocoonJS": true
 	}
 }
