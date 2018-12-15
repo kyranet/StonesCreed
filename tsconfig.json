@@ -1,0 +1,23 @@
+{
+	"compileOnSave": true,
+	"compilerOptions": {
+		"alwaysStrict": true,
+		"experimentalDecorators": true,
+		"lib": ["esnext", "dom"],
+		"module": "none",
+		"noUnusedParameters": true,
+		"sourceMap": true,
+		"noUnusedLocals": true,
+		"removeComments": true,
+		"target": "es2015"
+	},
+	"exclude": [
+		"node_modules",
+		"bin",
+		"examples",
+		"scripts"
+	],
+	"include": [
+		"./src/**/*"
+	]
+}
