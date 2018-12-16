@@ -98,7 +98,6 @@ export class GameObject extends Phaser.Sprite {
 
 import { Character } from './characters/Character';
 import { Enemy } from './characters/Enemy';
-import { NPC } from './characters/NPC';
 import { Player } from './characters/Player';
 import { HidingSpot } from './hidingSpots/HidingSpot';
 import { Boulder } from './traps/Boulder';
@@ -108,7 +107,6 @@ GameObject.factory.set('GameObject', GameObject);
 GameObject.factory.set('Character', Character);
 GameObject.factory.set('Player', Player);
 GameObject.factory.set('Enemy', Enemy);
-GameObject.factory.set('NPC', NPC);
 GameObject.factory.set('HidingSpot', HidingSpot);
 GameObject.factory.set('Boulder', Boulder);
 GameObject.factory.set('Trap', Trap);
