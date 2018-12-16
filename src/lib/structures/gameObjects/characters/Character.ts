@@ -1,6 +1,3 @@
-import { IInventorySerialized, Inventory } from '../../common/Inventory';
-import { Item } from '../../items/Item';
-import { ItemWeapon } from '../../items/ItemWeapon';
 import { GameManager } from '../../managers/GameManager';
 import { CharacterState, Direction } from '../../misc/types';
 import { GameObject, IGameObjectSerialized } from '../GameObject';
@@ -10,7 +7,6 @@ export class Character extends GameObject {
 	public runSpeed = 0;
 	public state: number = CharacterState.stand;
 	public direction = Direction.down;
-	public inventory = new Inventory();
 	public strength = 0;
 	public attackCooldown = 1000;
 	protected attackRefresh = 0;
@@ -37,11 +33,6 @@ export class Character extends GameObject {
 		this.animations.add('dead.left', [41, 42, 43]);
 	}
 
-	public get damageStrength() {
-		const item = this.inventory.active;
-		return item && item instanceof ItemWeapon ? item.damage : this.strength;
-	}
-
 	public setStrength(strength: number) {
 		this.strength = strength;
 		return this;
@@ -60,7 +51,7 @@ export class Character extends GameObject {
 		const now = Date.now();
 		if (now < this.attackRefresh) return;
 		this.attackRefresh = Date.now() + this.attackCooldown;
-		character.damage(this.damageStrength);
+		character.damage(this.strength);
 		this.animations.play(`kill.${Direction[this.direction]}`, (this.attackCooldown / 1000) * 2);
 	}
 
@@ -115,8 +106,6 @@ export class Character extends GameObject {
 		this.direction = data.direction;
 		this.runSpeed = data.runSpeed;
 		this.walkSpeed = data.walkSpeed;
-		this.inventory.clear();
-		for (const entry of data.inventory.items) this.inventory.set(entry.name, new Item(this.gameManager.game, entry.name));
 		this.setStrength(data.strength);
 		return this;
 	}
@@ -125,7 +114,6 @@ export class Character extends GameObject {
 		return {
 			...super.toJSON(),
 			direction: this.direction,
-			inventory: this.inventory.toJSON(),
 			runSpeed: this.runSpeed,
 			strength: this.strength,
 			walkSpeed: this.walkSpeed,
@@ -152,7 +140,6 @@ export class Character extends GameObject {
  */
 export interface ICharacterSerialized extends IGameObjectSerialized {
 	direction: number;
-	inventory: IInventorySerialized;
 	runSpeed: number;
 	strength: number;
 	walkSpeed: number;

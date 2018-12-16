@@ -11,10 +11,6 @@
 			"y": 0
 		},
 		"direction": 1,
-		"inventory": {
-			"active": null,
-			"items": []
-		},
 		"runSpeed": 70,
 		"strength": 0.85,
 		"walkSpeed": 40,
@@ -33,10 +29,6 @@
 			"y": 0
 		},
 		"direction": 1,
-		"inventory": {
-			"active": null,
-			"items": []
-		},
 		"runSpeed": 70,
 		"strength": 2,
 		"walkSpeed": 40,
