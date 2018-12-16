@@ -6,7 +6,6 @@ import { Character, ICharacterSerialized } from './Character';
 export class Player extends Character {
 
 	public hidingSpot: HidingSpot = null;
-	public money = 0;
 	private readonly directions = {
 		down: false,
 		left: false,
@@ -100,15 +99,13 @@ export class Player extends Character {
 
 	public fromJSON(data: IPlayerSerialized) {
 		super.fromJSON(data);
-		this.money = data.money;
 		return this;
 	}
 
 	public toJSON(): IPlayerSerialized {
 		return {
 			...super.toJSON(),
-			hidingSpot: this.hidingSpot.toJSON(),
-			money: this.money
+			hidingSpot: this.hidingSpot.toJSON()
 		};
 	}
 
@@ -119,5 +116,4 @@ export class Player extends Character {
  */
 export interface IPlayerSerialized extends ICharacterSerialized {
 	hidingSpot: IHidingSpotSerialized;
-	money: number;
 }

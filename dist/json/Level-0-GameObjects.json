@@ -14,8 +14,7 @@
 		"runSpeed": 70,
 		"strength": 0.85,
 		"walkSpeed": 40,
-		"hidingSpot": null,
-		"money": 50
+		"hidingSpot": null
 	},
 	{
 		"name": "enemy",
