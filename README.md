@@ -16,10 +16,10 @@ cd CreedStones
 yarn
 ```
 
-To **build** the game, run the `compile` script from the project root:
+To **build** the game, run the `bundle` script from the project root:
 
 ```
-yarn compile
+yarn bundle
 ```
 
-The `dist` folder will contain a build of the game.
+The `dist` folder will contain a build of the full game.
