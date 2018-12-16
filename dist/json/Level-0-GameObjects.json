@@ -16,7 +16,7 @@
 			"items": []
 		},
 		"runSpeed": 70,
-		"strength": 2,
+		"strength": 0.85,
 		"walkSpeed": 40,
 		"hidingSpot": null,
 		"money": 50
@@ -25,7 +25,7 @@
 		"name": "enemy",
 		"position": {
 			"x": 25,
-			"y": 40
+			"y": 50
 		},
 		"type": "Enemy",
 		"velocity": {

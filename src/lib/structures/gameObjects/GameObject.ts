@@ -21,6 +21,12 @@ export class GameObject extends Phaser.Sprite {
 
 	public destroy(destroyChildren?: boolean) {
 		super.destroy(destroyChildren);
+		this.gameManager.gameObjects.delete(this);
+	}
+
+	public collides(gameObject: GameObject) {
+		if (!(gameObject instanceof GameObject)) throw new TypeError(`"gameObject" must be an instance of GameObject.`);
+		return true;
 	}
 
 	/**

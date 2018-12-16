@@ -12,29 +12,34 @@ export class Character extends GameObject {
 	public direction = Direction.down;
 	public inventory = new Inventory();
 	public strength = 0;
+	public attackCooldown = 1000;
+	protected attackRefresh = 0;
 
 	public constructor(gameManager: GameManager, x: number, y: number, key?: string, frame?: string) {
 		super(gameManager, x, y, key, frame);
 		this.body.setSize(this.width, this.height * 0.7, 0, this.height * 0.3);
 
-		// TODO(kyranet): Update the codes once the sprites are finished
 		this.animations.add('stand.down', [0]);
 		this.animations.add('move.down', [1, 2, 3, 4, 5]);
 		this.animations.add('kill.down', [6, 7]);
-		this.animations.add('stand.right', [8]);
-		this.animations.add('move.right', [9, 10, 11, 12, 13]);
-		this.animations.add('kill.right', [14, 15]);
-		this.animations.add('stand.up', [16]);
-		this.animations.add('move.up', [17, 18, 19, 20, 21]);
-		this.animations.add('kill.up', [22, 23]);
-		this.animations.add('stand.left', [24]);
-		this.animations.add('move.left', [25, 26, 27, 28, 29]);
-		this.animations.add('kill.left', [30, 31]);
+		this.animations.add('dead.down', [8, 9, 10]);
+		this.animations.add('stand.right', [11]);
+		this.animations.add('move.right', [12, 13, 14, 15, 16]);
+		this.animations.add('kill.right', [17, 18]);
+		this.animations.add('dead.right', [19, 20, 21]);
+		this.animations.add('stand.up', [22]);
+		this.animations.add('move.up', [23, 24, 25, 26, 27]);
+		this.animations.add('kill.up', [28, 29]);
+		this.animations.add('dead.up', [30, 31, 32]);
+		this.animations.add('stand.left', [33]);
+		this.animations.add('move.left', [34, 35, 36, 37, 38]);
+		this.animations.add('kill.left', [39, 40]);
+		this.animations.add('dead.left', [41, 42, 43]);
 	}
 
 	public get damageStrength() {
 		const item = this.inventory.active;
-		return item instanceof ItemWeapon ? item.damage : this.strength;
+		return item && item instanceof ItemWeapon ? item.damage : this.strength;
 	}
 
 	public setStrength(strength: number) {
@@ -52,8 +57,11 @@ export class Character extends GameObject {
 	 * @param character The character this one is attempting to attack
 	 */
 	public attack(character: Character) {
+		const now = Date.now();
+		if (now < this.attackRefresh) return;
+		this.attackRefresh = Date.now() + this.attackCooldown;
 		character.damage(this.damageStrength);
-		this.animations.play(`kill.${Direction[this.direction]}`, 2);
+		this.animations.play(`kill.${Direction[this.direction]}`, (this.attackCooldown / 1000) * 2);
 	}
 
 	/**
@@ -61,7 +69,9 @@ export class Character extends GameObject {
 	 */
 	public kill() {
 		this.setState(CharacterState.dead);
-		return super.kill();
+		this.animations.play(`dead.${Direction[this.direction]}`, 1.5);
+		this.game.time.events.add(Phaser.Timer.SECOND * 3, () => super.kill());
+		return this;
 	}
 
 	/**
@@ -70,12 +80,7 @@ export class Character extends GameObject {
 	public walk() {
 		this.setState(CharacterState.walk);
 		this.animations.play(`move.${Direction[this.direction]}`, 5);
-		switch (this.direction) {
-			case Direction.down: this.setVelocity(0, this.walkSpeed); break;
-			case Direction.up: this.setVelocity(0, -this.walkSpeed); break;
-			case Direction.left: this.setVelocity(-this.walkSpeed, 0); break;
-			default: this.setVelocity(this.walkSpeed, 0);
-		}
+		this.updateVelocity(this.walkSpeed);
 	}
 
 	/**
@@ -84,12 +89,7 @@ export class Character extends GameObject {
 	public run() {
 		this.setState(CharacterState.run);
 		this.animations.play(`move.${Direction[this.direction]}`, 8);
-		switch (this.direction) {
-			case Direction.down: this.setVelocity(0, this.runSpeed); break;
-			case Direction.up: this.setVelocity(0, -this.runSpeed); break;
-			case Direction.left: this.setVelocity(-this.runSpeed, 0); break;
-			default: this.setVelocity(this.runSpeed, 0);
-		}
+		this.updateVelocity(this.runSpeed);
 	}
 
 	/**
@@ -130,6 +130,19 @@ export class Character extends GameObject {
 			strength: this.strength,
 			walkSpeed: this.walkSpeed,
 		};
+	}
+
+	protected triggerWalk() {
+		this.updateVelocity(this.walkSpeed);
+	}
+
+	protected updateVelocity(speed: number) {
+		switch (this.direction) {
+			case Direction.down: this.setVelocity(0, speed); break;
+			case Direction.up: this.setVelocity(0, -speed); break;
+			case Direction.left: this.setVelocity(-speed, 0); break;
+			default: this.setVelocity(speed, 0);
+		}
 	}
 
 }

@@ -14,6 +14,11 @@ export class Player extends Character {
 		up: false
 	};
 	private readonly cursorKeys: Phaser.CursorKeys = this.game.input.keyboard.createCursorKeys();
+	private readonly actions = {
+		interact: false,
+		kill: false
+	};
+	private movementRefresh = 0;
 
 	public constructor(gameManager: GameManager, x: number, y: number) {
 		super(gameManager, x, y, 'player');
@@ -22,11 +27,15 @@ export class Player extends Character {
 	}
 
 	public update() {
+		if (Date.now() < this.movementRefresh) return;
+
 		this.directions.down = this.cursorKeys.down.isDown;
 		this.directions.left = this.cursorKeys.left.isDown;
 		this.directions.right = this.cursorKeys.right.isDown;
 		this.directions.up = this.cursorKeys.up.isDown;
-		const running = this.gameManager.game.input.keyboard.isDown(Phaser.Keyboard.SHIFT);
+
+		const keyboard = this.gameManager.game.input.keyboard;
+		const running = keyboard.isDown(Phaser.Keyboard.SHIFT);
 
 		if (this.directions.down !== this.directions.up) {
 			this.direction = this.directions.down ? Direction.down : Direction.up;
@@ -39,6 +48,31 @@ export class Player extends Character {
 		} else {
 			this.stand();
 		}
+
+		if (keyboard.isDown(Phaser.Keyboard.X)) {
+			this.actions.interact = false;
+			this.actions.kill = true;
+			this.triggerWalk();
+		} else if (keyboard.isDown(Phaser.Keyboard.Z)) {
+			this.actions.interact = true;
+			this.actions.kill = false;
+			this.triggerWalk();
+		} else {
+			this.actions.interact = false;
+			this.actions.kill = false;
+		}
+	}
+
+	public attack(character: Character) {
+		super.attack(character);
+		this.movementRefresh = this.attackRefresh;
+	}
+
+	public collides(gameObject: Character) {
+		if (!(gameObject instanceof Character)) return;
+		if (this.actions.kill) this.attack(gameObject);
+		else if (this.actions.interact) gameObject.interact(this);
+		return true;
 	}
 
 	/**
