@@ -25,7 +25,7 @@ export class ItemWeapon extends Item {
 
 }
 
-Item.factory.add(ItemWeapon);
+Item.factory.set('ItemWeapon', ItemWeapon);
 
 /**
  * The serialized item weapon data

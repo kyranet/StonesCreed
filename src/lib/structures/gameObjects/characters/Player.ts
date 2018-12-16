@@ -78,7 +78,7 @@ export class Player extends Character {
 
 }
 
-Player.factory.add(Player);
+Player.factory.set('Player', Player);
 
 /**
  * The serialized player data

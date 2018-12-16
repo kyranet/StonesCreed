@@ -8,6 +8,7 @@ export class GameObject extends Phaser.Sprite {
 		// Add the gameobject itself to the game
 		this.game.add.existing(this);
 		this.gameManager.gameObjects.push(this);
+		this.smoothed = false;
 	}
 
 	/**
@@ -80,7 +81,7 @@ export class GameObject extends Phaser.Sprite {
 
 }
 
-GameObject.factory.add(GameObject);
+GameObject.factory.set('GameObject', GameObject);
 
 /**
  * The serialized game object data

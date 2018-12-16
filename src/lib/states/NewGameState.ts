@@ -1,7 +1,11 @@
 import { readLine } from '../util/util';
-import { PlayState } from './PlayState';
+import { GameState } from './GameState';
 
-export class NewGameState extends Phaser.State {
+export class NewGameState extends GameState {
+
+	public preload() {
+		this.game.load.json('Level-0-GameObjects', 'json/Level-0-GameObjects.json');
+	}
 
 	public create() {
 		const titleText = this.game.add.text(this.game.world.centerX, this.game.world.centerY - 65, 'Insert your name',
@@ -14,10 +18,12 @@ export class NewGameState extends Phaser.State {
 		inputText.alignTo(titleText, Phaser.BOTTOM_CENTER, 0, 25);
 
 		readLine(inputText, (name) => {
-			(this.game.state.states.play as PlayState).gameManager.playerName = name;
 			titleText.destroy(true);
 			inputText.destroy(true);
 			this.game.state.start('play');
+			const gameManager = GameState.gameManager;
+			gameManager.playerName = name;
+			gameManager.storageManager.loadGameObjects(this.game.cache.getJSON('Level-0-GameObjects'));
 		}, { maximumLength: 20 });
 	}
 

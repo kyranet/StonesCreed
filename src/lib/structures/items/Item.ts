@@ -33,7 +33,7 @@ export class Item {
 
 }
 
-Item.factory.add(Item);
+Item.factory.set('Item', Item);
 
 /**
  * The serialized item data

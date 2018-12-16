@@ -97,7 +97,6 @@ export class Character extends GameObject {
 		this.runSpeed = data.runSpeed;
 		this.walkSpeed = data.walkSpeed;
 		this.inventory.clear();
-		this.inventory.active = new Item(this.game, data.inventory.active);
 		for (const entry of data.inventory.items) this.inventory.set(entry.name, new Item(this.game, entry.name));
 		this.setStrength(data.strength);
 		return this;
@@ -116,7 +115,7 @@ export class Character extends GameObject {
 
 }
 
-Character.factory.add(Character);
+Character.factory.set('Character', Character);
 
 /**
  * The serialized character data

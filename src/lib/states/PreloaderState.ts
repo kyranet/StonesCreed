@@ -1,4 +1,6 @@
-export class PreloaderState extends Phaser.State {
+import { GameState } from './GameState';
+
+export class PreloaderState extends GameState {
 
 	private loadingBar: Phaser.Sprite;
 
@@ -9,9 +11,6 @@ export class PreloaderState extends Phaser.State {
 
 		// TODO: load here the assets for the game
 		this.game.load.image('logo', 'images/StonesCreed.png');
-		this.game.load.spritesheet('overworld', 'images/overworld.png', 16, 16);
-		this.game.load.spritesheet('cave', 'images/cave.png', 16, 16);
-		this.game.load.spritesheet('objects', 'images/objects.png', 16, 16);
 	}
 
 	public create() {

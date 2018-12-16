@@ -1,0 +1,22 @@
+[{
+	"name": "player",
+	"position": {
+		"x": 3,
+		"y": 3
+	},
+	"type": "Player",
+	"velocity": {
+		"x": 0,
+		"y": 0
+	},
+	"direction": 0,
+	"inventory": {
+		"active": null,
+		"items": []
+	},
+	"runSpeed": 5,
+	"strength": 2,
+	"walkSpeed": 2,
+	"hidingSpot": null,
+	"money": 50
+}]

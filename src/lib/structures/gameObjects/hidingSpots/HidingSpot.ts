@@ -31,7 +31,7 @@ export class HidingSpot extends GameObject {
 
 }
 
-HidingSpot.factory.add(HidingSpot);
+HidingSpot.factory.set('HidingSpot', HidingSpot);
 
 /**
  * The serialized hiding spot data

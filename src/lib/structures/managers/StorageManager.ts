@@ -25,18 +25,24 @@ export class StorageManager {
 		this.gameManager.level = level;
 
 		const gameObjects = JSON.parse(localStorage.getItem('gameObjects')) as IGameObjectSerialized[];
-		if (gameObjects) {
-			for (const gameObject of gameObjects) {
-				const Ctor = GameObject.factory.get(gameObject.type);
-				if (Ctor) new Ctor(this.gameManager, 0, 0).fromJSON(gameObject);
-				throw new Error(`Could not find a constructor for ${gameObject.type || 'unknown'}. Aborting.`);
-			}
-
-			this.gameManager.player = this.gameManager.gameObjects.find((gameObject) => gameObject instanceof Player) as Player;
-		}
+		if (gameObjects) this.loadGameObjects(gameObjects);
 
 		const playerName = localStorage.getItem('playerName');
-		if (playerName) this.gameManager.playerName = playerName;
+		if (playerName) this.loadPlayerName(playerName);
+	}
+
+	public loadGameObjects(gameObjects: IGameObjectSerialized[]) {
+		for (const gameObject of gameObjects) {
+			const Ctor = GameObject.factory.get(gameObject.type);
+			if (Ctor) new Ctor(this.gameManager, 0, 0, gameObject.key, gameObject.frame).fromJSON(gameObject);
+			else throw new Error(`Could not find a constructor for ${gameObject.type || 'unknown'}. Aborting.`);
+		}
+
+		this.gameManager.player = this.gameManager.gameObjects.find((gameObject) => gameObject instanceof Player) as Player;
+	}
+
+	public loadPlayerName(playerName: string) {
+		this.gameManager.playerName = playerName;
 	}
 
 }
