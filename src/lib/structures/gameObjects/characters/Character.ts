@@ -16,6 +16,20 @@ export class Character extends GameObject {
 	public constructor(gameManager: GameManager, x: number, y: number, key?: string, frame?: string) {
 		super(gameManager, x, y, key, frame);
 		this.body.setSize(this.width, this.height * 0.7, 0, this.height * 0.3);
+
+		// TODO(kyranet): Update the codes once the sprites are finished
+		this.animations.add('stand.down', [0]);
+		this.animations.add('move.down', [1, 2, 3, 4, 5]);
+		this.animations.add('kill.down', [6, 7]);
+		this.animations.add('stand.right', [8]);
+		this.animations.add('move.right', [9, 10, 11, 12, 13]);
+		this.animations.add('kill.right', [14, 15]);
+		this.animations.add('stand.up', [16]);
+		this.animations.add('move.up', [17, 18, 19, 20, 21]);
+		this.animations.add('kill.up', [22, 23]);
+		this.animations.add('stand.left', [24]);
+		this.animations.add('move.left', [25, 26, 27, 28, 29]);
+		this.animations.add('kill.left', [30, 31]);
 	}
 
 	public get damageStrength() {
@@ -39,6 +53,7 @@ export class Character extends GameObject {
 	 */
 	public attack(character: Character) {
 		character.damage(this.damageStrength);
+		this.animations.play(`kill.${Direction[this.direction]}`, 2);
 	}
 
 	/**
@@ -54,6 +69,7 @@ export class Character extends GameObject {
 	 */
 	public walk() {
 		this.setState(CharacterState.walk);
+		this.animations.play(`move.${Direction[this.direction]}`, 5);
 		switch (this.direction) {
 			case Direction.down: this.setVelocity(0, this.walkSpeed); break;
 			case Direction.up: this.setVelocity(0, -this.walkSpeed); break;
@@ -67,6 +83,7 @@ export class Character extends GameObject {
 	 */
 	public run() {
 		this.setState(CharacterState.run);
+		this.animations.play(`move.${Direction[this.direction]}`, 8);
 		switch (this.direction) {
 			case Direction.down: this.setVelocity(0, this.runSpeed); break;
 			case Direction.up: this.setVelocity(0, -this.runSpeed); break;
@@ -80,6 +97,8 @@ export class Character extends GameObject {
 	 */
 	public stand() {
 		this.setState(CharacterState.stand);
+		this.animations.play(`stand.${Direction[this.direction]}`, 0);
+		this.animations.stop();
 		this.setVelocity(0, 0);
 	}
 

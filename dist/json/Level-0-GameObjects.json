@@ -10,7 +10,7 @@
 			"x": 0,
 			"y": 0
 		},
-		"direction": 0,
+		"direction": 1,
 		"inventory": {
 			"active": null,
 			"items": []
@@ -32,7 +32,7 @@
 			"x": 0,
 			"y": 0
 		},
-		"direction": 0,
+		"direction": 1,
 		"inventory": {
 			"active": null,
 			"items": []
