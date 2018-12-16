@@ -16,7 +16,9 @@ export class MenuState extends GameState {
 			this.game.state.start('newGame');
 		});
 		if (localStorage.getItem('level')) this.createButton('Continue', () => {
-			GameState.pendingOnCreate.push((playState: PlayState) => playState.gameManager.storageManager.load());
+			GameState.pendingOnCreate.push((playState: PlayState) => {
+				playState.gameManager.storageManager.load();
+			});
 			this.game.state.start('play');
 		});
 	}
