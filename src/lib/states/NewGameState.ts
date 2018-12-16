@@ -1,9 +1,11 @@
 import { readLine } from '../util/util';
 import { GameState } from './GameState';
+import { PlayState } from './PlayState';
 
 export class NewGameState extends GameState {
 
 	public preload() {
+		super.preload(this.game);
 		this.game.load.json('Level-0-GameObjects', 'json/Level-0-GameObjects.json');
 	}
 
@@ -21,11 +23,10 @@ export class NewGameState extends GameState {
 			titleText.destroy(true);
 			inputText.destroy(true);
 			this.game.state.start('play');
-			const gameManager = GameState.gameManager;
-			gameManager.playerName = name;
-			gameManager.pendingOnCreate.push(() => {
+			GameState.pendingOnCreate.push((playState: PlayState) => {
 				console.log('Loading New Game...');
-				gameManager.storageManager.loadGameObjects(this.game.cache.getJSON('Level-0-GameObjects'));
+				playState.gameManager.playerName = name;
+				playState.gameManager.storageManager.loadGameObjects(this.game.cache.getJSON('Level-0-GameObjects'));
 				console.log('Loaded!');
 			});
 		}, { maximumLength: 20 });

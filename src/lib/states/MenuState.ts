@@ -1,7 +1,7 @@
 import { GameState } from './GameState';
+import { PlayState } from './PlayState';
 
 export class MenuState extends GameState {
-
 	public texts: Phaser.Text[] = [];
 	public logo: Phaser.Sprite = null;
 
@@ -16,7 +16,8 @@ export class MenuState extends GameState {
 			this.game.state.start('newGame');
 		});
 		if (localStorage.getItem('level')) this.createButton('Continue', () => {
-			GameState.gameManager.storageManager.load();
+			GameState.pendingOnCreate.push((playState: PlayState) => playState.gameManager.storageManager.load());
+			this.game.state.start('play');
 		});
 	}
 

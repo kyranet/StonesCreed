@@ -15,5 +15,4 @@ window.onload = function onload() {
 	game.state.add('newGame', NewGameState);
 
 	game.state.start('boot');
-	console.log(game);
 };

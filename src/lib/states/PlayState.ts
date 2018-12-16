@@ -1,12 +1,14 @@
+import { GameManager } from '../structures/managers/GameManager';
 import { GameState } from './GameState';
 
 export class PlayState extends GameState {
+	public gameManager: GameManager = null;
 	public tilemaps: Map<number, Phaser.Tilemap> = new Map();
 	public obstacleLayer: Phaser.TilemapLayer = null;
 
 	public preload() {
-		super.preload();
-		this.game.load.tilemap('Level-0', `json/Level-0.json`, null, Phaser.Tilemap.TILED_JSON);
+		super.preload(this.game);
+		this.game.load.tilemap('Level-0', 'json/Level-0.json', null, Phaser.Tilemap.TILED_JSON);
 		this.game.load.image('overworld', 'images/overworld.png');
 		this.game.load.image('cave', 'images/cave.png');
 		this.game.load.image('objects', 'images/objects.png');
@@ -26,14 +28,16 @@ export class PlayState extends GameState {
 			Phaser.Keyboard.SPACEBAR
 		]);
 
+		this.gameManager = new GameManager(this.game);
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
 		this.game.stage.backgroundColor = '#99F';
 		super.create();
 	}
 
 	public update() {
-		super.update();
-		this.game.physics.arcade.collide(GameState.gameManager.gameObjectsGroup, this.obstacleLayer);
+		super.update(this.game);
+		this.game.physics.arcade.collide(this.gameManager.gameObjectsGroup, this.obstacleLayer);
+		this.gameManager.update();
 	}
 
 	protected getTilemap(level: number) {
@@ -55,9 +59,6 @@ export class PlayState extends GameState {
 			this.obstacleLayer.smoothed = false;
 			this.game.physics.arcade.enable(this.obstacleLayer);
 			tilemap.setCollisionByExclusion([], true, this.obstacleLayer);
-			// GameState.gameManager.obstaclesGroup.add(obstacles);
-			// this.game.physics.arcade.enable(obstacles);
-			// tilemap.setCollisionByExclusion([], true, obstacles);
 
 			this.tilemaps.set(level, tilemap);
 		}

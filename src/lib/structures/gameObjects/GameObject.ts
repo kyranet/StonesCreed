@@ -10,18 +10,12 @@ export class GameObject extends Phaser.Sprite {
 		// Add the gameobject itself to the game
 		this.game.add.existing(this);
 		this.game.physics.arcade.enable(this);
-		this.gameManager.gameObjects.add(this);
 		this.gameManager.gameObjectsGroup.add(this);
 		this.body.collideWorldBounds = true;
 		this.body.allowRotation = false;
 		this.body.allowGravity = false;
 		this.body.immovable = true;
 		this.smoothed = false;
-	}
-
-	public destroy(destroyChildren?: boolean) {
-		super.destroy(destroyChildren);
-		this.gameManager.gameObjects.delete(this);
 	}
 
 	public collides(gameObject: GameObject) {

@@ -8,7 +8,7 @@ export class StorageManager {
 
 	public save() {
 		localStorage.clear();
-		localStorage.setItem('gameObjects', JSON.stringify(this.gameManager.gameObjects));
+		localStorage.setItem('gameObjects', JSON.stringify(this.gameManager.gameObjectsGroup.children));
 		localStorage.setItem('level', this.gameManager.level.toString());
 		localStorage.setItem('playerName', this.gameManager.playerName);
 	}
