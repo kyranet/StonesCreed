@@ -8,7 +8,6 @@ export class PlayState extends GameState {
 		this.game.load.image('overworld', 'images/overworld.png');
 		this.game.load.image('cave', 'images/cave.png');
 		this.game.load.image('objects', 'images/objects.png');
-		this.game.load.spritesheet('player', 'images/player.png', 16, 32);
 	}
 
 	public create() {
