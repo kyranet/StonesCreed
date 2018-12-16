@@ -29,7 +29,6 @@ export class PlayState extends GameState {
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
 		this.game.stage.backgroundColor = '#99F';
 		super.create();
-		console.log(this);
 	}
 
 	public update() {

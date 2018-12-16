@@ -13,13 +13,11 @@ export class Player extends Character {
 		right: false,
 		up: false
 	};
-	private cursorKeys: Phaser.CursorKeys = null;
+	private readonly cursorKeys: Phaser.CursorKeys = this.game.input.keyboard.createCursorKeys();
 
 	public constructor(gameManager: GameManager, x: number, y: number) {
 		super(gameManager, x, y, 'player');
 		this.game.camera.follow(this);
-		this.cursorKeys = this.game.input.keyboard.createCursorKeys();
-		console.log(this);
 	}
 
 	public update() {

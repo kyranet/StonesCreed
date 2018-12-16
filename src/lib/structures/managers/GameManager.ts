@@ -27,7 +27,6 @@ export class GameManager {
 
 	public update() {
 		for (const gameObject of this.gameObjects) gameObject.update();
-		this.game.physics.arcade.collide(this.gameObjectsGroup, this.obstaclesGroup, console.log, null, this);
 	}
 
 }

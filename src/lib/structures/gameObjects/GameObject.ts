@@ -15,7 +15,6 @@ export class GameObject extends Phaser.Sprite {
 	}
 
 	public destroy(destroyChildren?: boolean) {
-		console.log(`Destroying GameObject ${this.key}`);
 		super.destroy(destroyChildren);
 	}
 
