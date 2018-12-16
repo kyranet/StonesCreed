@@ -4,6 +4,7 @@ export class PlayState extends GameState {
 	public tilemaps: Map<number, Phaser.Tilemap> = new Map();
 
 	public preload() {
+		super.preload();
 		this.game.load.tilemap('Level-0', `json/Level-0.json`, null, Phaser.Tilemap.TILED_JSON);
 		this.game.load.image('overworld', 'images/overworld.png');
 		this.game.load.image('cave', 'images/cave.png');
@@ -14,7 +15,7 @@ export class PlayState extends GameState {
 		this.getTilemap(0);
 
 		this.camera.scale.setTo(3, 3);
-		this.game.add.tileSprite(0, 0, 16, 32, 'player');
+		// this.game.add.tileSprite(0, 0, 16, 32, 'player');
 
 		// Prevent directions and space key events bubbling up to browser,
 		// since these keys will make web page scroll which is not
@@ -29,6 +30,13 @@ export class PlayState extends GameState {
 
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
 		this.game.stage.backgroundColor = '#99F';
+		super.create();
+	}
+
+	public update() {
+		for (const gameObject of GameState.gameManager.gameObjects) {
+			gameObject.update();
+		}
 	}
 
 	private getTilemap(level: number) {

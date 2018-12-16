@@ -15,5 +15,3 @@ export class NPC extends Character {
 	}
 
 }
-
-NPC.factory.set('NPC', NPC);

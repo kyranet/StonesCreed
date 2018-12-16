@@ -34,11 +34,10 @@ export class StorageManager {
 	public loadGameObjects(gameObjects: IGameObjectSerialized[]) {
 		for (const gameObject of gameObjects) {
 			const Ctor = GameObject.factory.get(gameObject.type);
-			if (Ctor) new Ctor(this.gameManager, 0, 0, gameObject.key, gameObject.frame).fromJSON(gameObject);
-			else throw new Error(`Could not find a constructor for ${gameObject.type || 'unknown'}. Aborting.`);
+			if (!Ctor) throw new Error(`Could not find a constructor for ${gameObject.type || 'unknown'}. Aborting.`);
+			const instance = new Ctor(this.gameManager, 0, 0, gameObject.key, gameObject.frame).fromJSON(gameObject);
+			if (gameObject.type === 'Player') this.gameManager.player = instance as Player;
 		}
-
-		this.gameManager.player = this.gameManager.gameObjects.find((gameObject) => gameObject instanceof Player) as Player;
 	}
 
 	public loadPlayerName(playerName: string) {

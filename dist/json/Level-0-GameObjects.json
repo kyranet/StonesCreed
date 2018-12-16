@@ -14,9 +14,9 @@
 		"active": null,
 		"items": []
 	},
-	"runSpeed": 5,
+	"runSpeed": 70,
 	"strength": 2,
-	"walkSpeed": 2,
+	"walkSpeed": 40,
 	"hidingSpot": null,
 	"money": 50
 }]

@@ -64,5 +64,3 @@ export class Boulder extends Trap {
 	}
 
 }
-
-Boulder.factory.set('Boulder', Boulder);

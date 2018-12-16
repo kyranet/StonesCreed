@@ -6,16 +6,17 @@ import { StorageManager } from './StorageManager';
 export class GameManager {
 	public mapManager: MapManager = null;
 	public storageManager = new StorageManager(this);
-	public gameObjects: GameObject[] = [];
+	public gameObjects: Set<GameObject> = new Set();
 	public player: Player = null;
 	public playerName: string = null;
 	public level = GameLevels.First;
+	public pendingOnCreate: Function[] = [];
 
 	public constructor(public game: Phaser.Game) { }
 
 	public clear() {
 		for (const gameObject of this.gameObjects) gameObject.destroy(true);
-		this.gameObjects.length = 0;
+		this.gameObjects.clear();
 		return this;
 	}
 

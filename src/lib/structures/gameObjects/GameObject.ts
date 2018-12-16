@@ -7,8 +7,15 @@ export class GameObject extends Phaser.Sprite {
 		super(gameManager.game, x, y, key, frame);
 		// Add the gameobject itself to the game
 		this.game.add.existing(this);
-		this.gameManager.gameObjects.push(this);
+		this.game.physics.arcade.enable(this);
+		this.gameManager.gameObjects.add(this);
 		this.smoothed = false;
+		console.log(this);
+	}
+
+	public destroy(destroyChildren?: boolean) {
+		console.log(`Destroying GameObject ${this.key}`);
+		super.destroy(destroyChildren);
 	}
 
 	/**
@@ -48,7 +55,7 @@ export class GameObject extends Phaser.Sprite {
 	 */
 	public interaction(gameObject: GameObject) {
 		if (!(gameObject instanceof GameObject))
-			throw new TypeError(`Expected gameObject to be a GameObject instance`);
+		throw new TypeError(`Expected gameObject to be a GameObject instance`);
 	}
 
 	public toJSON(): IGameObjectSerialized {
@@ -73,15 +80,30 @@ export class GameObject extends Phaser.Sprite {
 		this.key = data.key;
 		this.name = data.name;
 		return this
-			.setPosition(data.position.x, data.position.y)
-			.setVelocity(data.velocity.x, data.velocity.y);
+		.setPosition(data.position.x, data.position.y)
+		.setVelocity(data.velocity.x, data.velocity.y);
 	}
 
 	public static factory = new GameObjectFactory();
 
 }
 
+import { Character } from './characters/Character';
+import { Enemy } from './characters/Enemy';
+import { NPC } from './characters/NPC';
+import { Player } from './characters/Player';
+import { HidingSpot } from './hidingSpots/HidingSpot';
+import { Boulder } from './traps/Boulder';
+import { Trap } from './traps/Trap';
+
 GameObject.factory.set('GameObject', GameObject);
+GameObject.factory.set('Character', Character);
+GameObject.factory.set('Player', Player);
+GameObject.factory.set('Enemy', Enemy);
+GameObject.factory.set('NPC', NPC);
+GameObject.factory.set('HidingSpot', HidingSpot);
+GameObject.factory.set('Boulder', Boulder);
+GameObject.factory.set('Trap', Trap);
 
 /**
  * The serialized game object data

@@ -13,18 +13,20 @@ export class Player extends Character {
 		right: false,
 		up: false
 	};
+	private cursorKeys: Phaser.CursorKeys = null;
 
 	public constructor(gameManager: GameManager, x: number, y: number) {
 		super(gameManager, x, y, 'player');
 		this.game.camera.follow(this);
+		this.cursorKeys = this.game.input.keyboard.createCursorKeys();
 	}
 
 	public update() {
-		this.directions.down = this.game.input.keyboard.isDown(Phaser.Keyboard.DOWN);
-		this.directions.left = this.game.input.keyboard.isDown(Phaser.Keyboard.LEFT);
-		this.directions.right = this.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT);
-		this.directions.up = this.game.input.keyboard.isDown(Phaser.Keyboard.UP);
-		const running = this.game.input.keyboard.isDown(Phaser.Keyboard.SHIFT);
+		this.directions.down = this.cursorKeys.down.isDown;
+		this.directions.left = this.cursorKeys.left.isDown;
+		this.directions.right = this.cursorKeys.right.isDown;
+		this.directions.up = this.cursorKeys.up.isDown;
+		const running = this.gameManager.game.input.keyboard.isDown(Phaser.Keyboard.SHIFT);
 
 		if (this.directions.down !== this.directions.up) {
 			this.direction = this.directions.down ? Direction.down : Direction.up;
@@ -77,8 +79,6 @@ export class Player extends Character {
 	}
 
 }
-
-Player.factory.set('Player', Player);
 
 /**
  * The serialized player data

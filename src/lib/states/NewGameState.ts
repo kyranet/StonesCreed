@@ -23,7 +23,11 @@ export class NewGameState extends GameState {
 			this.game.state.start('play');
 			const gameManager = GameState.gameManager;
 			gameManager.playerName = name;
-			gameManager.storageManager.loadGameObjects(this.game.cache.getJSON('Level-0-GameObjects'));
+			gameManager.pendingOnCreate.push(() => {
+				console.log('Loading New Game...');
+				gameManager.storageManager.loadGameObjects(this.game.cache.getJSON('Level-0-GameObjects'));
+				console.log('Loaded!');
+			});
 		}, { maximumLength: 20 });
 	}
 

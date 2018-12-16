@@ -28,5 +28,3 @@ export class Trap extends GameObject {
 	}
 
 }
-
-Trap.factory.set('Trap', Trap);
