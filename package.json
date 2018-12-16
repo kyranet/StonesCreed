@@ -1,5 +1,5 @@
 {
-  "name": "creedstones",
+  "name": "stonescreed",
   "version": "0.1.0",
   "description": "Browser videogame built with Phaser and TypeScript",
   "scripts": {
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kyranet/CreedStones.git"
+    "url": "git+https://github.com/kyranet/StonesCreed.git"
   },
   "dependencies": {
     "phaser": "2.6.2"
@@ -39,7 +39,7 @@
   "author": "kyranet <kyradiscord@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kyranet/CreedStones/issues"
+    "url": "https://github.com/kyranet/StonesCreed/issues"
   },
-  "homepage": "https://github.com/kyranet/CreedStones#readme"
+  "homepage": "https://github.com/kyranet/StonesCreed#readme"
 }

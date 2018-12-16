@@ -1,4 +1,4 @@
-# Stone's Creed <img src="https://github.com/kyranet/CreedStones/blob/master/dist/images/StonesCreed.png?raw=true" align="right" width="30%">
+# Stone's Creed <img src="https://github.com/kyranet/StonesCreed/blob/master/dist/images/StonesCreed.png?raw=true" align="right" width="30%">
 
 Awesome game by
 [kyranet](https://github.com/kyranet) and [CarlosMGM](https://github.com/CarlosMGM).
@@ -11,8 +11,8 @@ We shall discover it with this game based on Phaser.js!
 Clone this repository and install dependencies:
 
 ```
-git clone kyranet/CreedStones
-cd CreedStones
+git clone kyranet/StonesCreed
+cd StonesCreed
 yarn
 ```
 
