@@ -15,11 +15,13 @@ REPO=$(git config remote.origin.url)
 SHA=$(git rev-parse --verify HEAD)
 
 TARGET_BRANCH="gh-pages"
-git clone $REPO dist -b $TARGET_BRANCH
+git clone $REPO out -b $TARGET_BRANCH
 
 yarn run bundle
 
-cd dist
+rsync -vau dist/ out/
+
+cd out
 git add --all .
 git config user.name "Travis CI"
 git config user.email "${COMMIT_EMAIL}"
