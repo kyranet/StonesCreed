@@ -15,9 +15,6 @@
     "type": "git",
     "url": "git+https://github.com/kyranet/StonesCreed.git"
   },
-  "dependencies": {
-    "phaser": "2.6.2"
-  },
   "devDependencies": {
     "@types/node": "^10.12.15",
     "ts-loader": "^5.3.1",
