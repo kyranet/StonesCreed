@@ -35,7 +35,7 @@ export class StorageManager {
 		for (const gameObject of gameObjects) {
 			const Ctor = GameObject.factory.get(gameObject.type);
 			if (!Ctor) throw new Error(`Could not find a constructor for ${gameObject.type || 'unknown'}. Aborting.`);
-			const instance = new Ctor(this.gameManager, 0, 0, gameObject.key, gameObject.frame).fromJSON(gameObject);
+			const instance = new Ctor(this.gameManager, gameObject.position.x, gameObject.position.y, gameObject.key, gameObject.frame).fromJSON(gameObject);
 			if (gameObject.type === 'Player') this.gameManager.player = instance as Player;
 		}
 	}

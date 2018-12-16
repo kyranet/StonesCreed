@@ -3,6 +3,8 @@ import { GameObjectFactory } from './GameObjectFactory';
 
 export class GameObject extends Phaser.Sprite {
 
+	public body: Phaser.Physics.Arcade.Body;
+
 	public constructor(public gameManager: GameManager, x: number, y: number, key?: string, frame?: string) {
 		super(gameManager.game, x, y, key, frame);
 		// Add the gameobject itself to the game
@@ -11,6 +13,9 @@ export class GameObject extends Phaser.Sprite {
 		this.gameManager.gameObjects.add(this);
 		this.gameManager.gameObjectsGroup.add(this);
 		this.body.collideWorldBounds = true;
+		this.body.allowRotation = false;
+		this.body.allowGravity = false;
+		this.body.immovable = true;
 		this.smoothed = false;
 	}
 
@@ -60,7 +65,6 @@ export class GameObject extends Phaser.Sprite {
 
 	public fromJSON(data: IGameObjectSerialized) {
 		this.name = data.name;
-		this.setPosition(data.position.x, data.position.y);
 		this.setVelocity(data.velocity.x, data.velocity.y);
 		return this;
 	}

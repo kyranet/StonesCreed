@@ -15,7 +15,7 @@ export class Character extends GameObject {
 
 	public constructor(gameManager: GameManager, x: number, y: number, key?: string, frame?: string) {
 		super(gameManager, x, y, key, frame);
-		this.game.physics.enable(this);
+		this.body.setSize(this.width, this.height * 0.7, 0, this.height * 0.3);
 	}
 
 	public get damageStrength() {

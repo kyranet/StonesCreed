@@ -18,6 +18,7 @@ export class Player extends Character {
 	public constructor(gameManager: GameManager, x: number, y: number) {
 		super(gameManager, x, y, 'player');
 		this.game.camera.follow(this);
+		this.body.immovable = false;
 	}
 
 	public update() {
