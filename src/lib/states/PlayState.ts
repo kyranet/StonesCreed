@@ -48,7 +48,8 @@ export class PlayState extends GameState {
 			background.smoothed = false;
 			background.resizeWorld();
 			// // Decoration
-			tilemap.createLayer(1).smoothed = false;
+			const decoration = tilemap.createLayer(1);
+			decoration.smoothed = false;
 			// // Obstacles
 			this.obstacleLayer = tilemap.createLayer(2);
 			this.obstacleLayer.smoothed = false;

@@ -8,7 +8,7 @@ export class Character extends GameObject {
 	public state: number = CharacterState.stand;
 	public direction = Direction.down;
 	public strength = 0;
-	public attackCooldown = 1000;
+	public attackCooldown = 500;
 	protected attackRefresh = 0;
 
 	public constructor(gameManager: GameManager, x: number, y: number, key?: string, frame?: string) {
@@ -16,20 +16,20 @@ export class Character extends GameObject {
 		this.body.setSize(this.width, this.height * 0.7, 0, this.height * 0.3);
 
 		this.animations.add('stand.down', [0]);
-		this.animations.add('move.down', [1, 2, 3, 4, 5]);
-		this.animations.add('kill.down', [6, 7]);
+		this.animations.add('move.down', [1, 2, 3, 4]);
+		this.animations.add('kill.down', [5, 6, 7]);
 		this.animations.add('dead.down', [8, 9, 10]);
 		this.animations.add('stand.right', [11]);
-		this.animations.add('move.right', [12, 13, 14, 15, 16]);
-		this.animations.add('kill.right', [17, 18]);
+		this.animations.add('move.right', [12, 13, 14, 15]);
+		this.animations.add('kill.right', [16, 17, 18]);
 		this.animations.add('dead.right', [19, 20, 21]);
 		this.animations.add('stand.up', [22]);
-		this.animations.add('move.up', [23, 24, 25, 26, 27]);
-		this.animations.add('kill.up', [28, 29]);
+		this.animations.add('move.up', [23, 24, 25, 26]);
+		this.animations.add('kill.up', [27, 28, 29]);
 		this.animations.add('dead.up', [30, 31, 32]);
 		this.animations.add('stand.left', [33]);
-		this.animations.add('move.left', [34, 35, 36, 37, 38]);
-		this.animations.add('kill.left', [39, 40]);
+		this.animations.add('move.left', [34, 35, 36, 37]);
+		this.animations.add('kill.left', [38, 39, 40]);
 		this.animations.add('dead.left', [41, 42, 43]);
 	}
 
@@ -52,7 +52,7 @@ export class Character extends GameObject {
 		if (now < this.attackRefresh) return;
 		this.attackRefresh = Date.now() + this.attackCooldown;
 		character.damage(this.strength);
-		this.animations.play(`kill.${Direction[this.direction]}`, (this.attackCooldown / 1000) * 2);
+		this.animations.play(`kill.${Direction[this.direction]}`, (1000 / this.attackCooldown) * 3);
 	}
 
 	/**
