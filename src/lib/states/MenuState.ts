@@ -24,7 +24,7 @@ export class MenuState extends GameState {
 		for (const text of this.texts) text.destroy(true);
 		this.texts.length = 0;
 		this.logo.destroy(true);
-		super.shutdown();
+		super.shutdown(this.game);
 	}
 
 	private createButton(name: string, cb: Function) {

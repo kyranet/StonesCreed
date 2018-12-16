@@ -389,7 +389,7 @@ declare namespace p2 {
 		public restitution: number;
 		public stiffness: number;
 		public relaxation: number;
-		public frictionStuffness: number;
+		public frictionStiffness: number;
 		public frictionRelaxation: number;
 		public surfaceVelocity: number;
 		public contactSkinSize: number;
@@ -444,16 +444,16 @@ declare namespace p2 {
 
 	}
 
-	export class BodyOptions {
+	export interface BodyOptions {
 
-		public mass: number;
-		public position: number[];
-		public velocity: number[];
-		public angle: number;
-		public angularVelocity: number;
-		public force: number[];
-		public angularForce: number;
-		public fixedRotation: number;
+		mass?: number;
+		position?: number[];
+		velocity?: number[];
+		angle?: number;
+		angularVelocity?: number;
+		force?: number[];
+		angularForce?: number;
+		fixedRotation?: boolean;
 
 	}
 
@@ -616,7 +616,7 @@ declare namespace p2 {
 
 		public static triangleArea(a: number[], b: number[], c: number[]): number;
 
-		public constructor(vertices: number[][], axes: number[]);
+		public constructor(options?: any);
 
 		public vertices: number[][];
 		public axes: number[];
@@ -646,6 +646,23 @@ declare namespace p2 {
 
 	}
 
+	export interface SharedShapeOptions {
+
+		position?: number[];
+		angle?: number;
+		collisionGroup?: number;
+		collisionResponse?: boolean;
+		collisionMask?: number;
+		sensor?: boolean;
+
+	}
+
+	export interface ShapeOptions extends SharedShapeOptions {
+
+		type?: number;
+
+	}
+
 	export class Shape {
 
 		public static idCounter: number;
@@ -658,7 +675,7 @@ declare namespace p2 {
 		public static CAPSULE: number;
 		public static HEIGHTFIELD: number;
 
-		public constructor(type: number);
+		public constructor(options?: ShapeOptions);
 
 		public type: number;
 		public id: number;
@@ -690,6 +707,20 @@ declare namespace p2 {
 
 	export class Plane extends Shape {
 
+	}
+
+	export interface BoxOptions {
+
+		width?: number;
+		height?: number;
+
+	}
+
+	export class Box extends Shape {
+		public constructor(options?: BoxOptions);
+
+		public width: number;
+		public height: number;
 	}
 
 	export class Rectangle extends Shape {

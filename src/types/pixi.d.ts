@@ -37,38 +37,14 @@ declare namespace PIXI {
 
 	}
 
-	export const defaultRenderOptions: PixiRendererOptions;
-
-	export const INTERACTION_REQUENCY: number;
-	export const AUTO_PREVENT_DEFAULT: boolean;
-
-	export const PI_2: number;
-	export const RAD_TO_DEG: number;
-	export const DEG_TO_RAD: number;
-
-	export const RETINA_PREFIX: string;
-	export const identityMatrix: Matrix;
 	export const glContexts: WebGLRenderingContext[];
 	export const instances: any[];
 
 	export const TextureSilentFail: boolean;
-	export const BitmapText: { fonts: {} };
-
-	export function isPowerOfTwo(width: number, height: number): boolean;
-
-	export function rgb2hex(rgb: number[]): string;
-	export function hex2rgb(hex: string): number[];
-
-	export function autoDetectRenderer(width?: number, height?: number, options?: PixiRendererOptions): PixiRenderer;
-	export function autoDetectRecommendedRenderer(width?: number, height?: number, options?: PixiRendererOptions): PixiRenderer;
 
 	export function canUseNewCanvasBlendModes(): boolean;
-	export function getNextPowerOfTwo(value: number): number;
-
-	export function AjaxRequest(): XMLHttpRequest;
 
 	export function CompileFragmentShader(gl: WebGLRenderingContext, shaderSrc: string[]): any;
-	export function CompileProgram(gl: WebGLRenderingContext, vertexSrc: string[], fragmentSrc: string[]): any;
 
 	export interface IEventCallback {
 		(e?: IEvent): void;
@@ -175,19 +151,9 @@ declare namespace PIXI {
 
 	}
 
-	/**
-	 * This is the base class for creating a PIXI filter. Currently only webGL supports filters.
-	 * If you want to make a custom filter this should be your base class.
-	 */
+	// Phaser.Filter is used instead
 	export class AbstractFilter {
 
-		/**
-		 * This is the base class for creating a PIXI filter. Currently only webGL supports filters.
-		 * If you want to make a custom filter this should be your base class.
-		 *
-		 * @param fragmentSrc The fragment source in an array of strings.
-		 * @param uniforms An object containing the uniforms for this filter.
-		 */
 		public constructor(fragmentSrc: string | string[], uniforms: any);
 
 		public dirty: boolean;
@@ -196,70 +162,7 @@ declare namespace PIXI {
 		public fragmentSrc: string | string[];
 
 		public apply(frameBuffer: WebGLFramebuffer): void;
-
-		/**
-		 * Syncs the uniforms between the class object and the shaders.
-		 */
 		public syncUniforms(): void;
-
-	}
-
-	export class AlphaMaskFilter extends AbstractFilter {
-
-		public constructor(texture: Texture);
-
-		public map: Texture;
-
-		public onTextureLoaded(): void;
-
-	}
-
-	export class AsciiFilter extends AbstractFilter {
-
-		public size: number;
-
-	}
-
-	export class AssetLoader implements Mixin {
-
-		public assetURLs: string[];
-		public crossorigin: boolean;
-		public loadersByType: { [key: string]: Loader };
-
-		public constructor(assetURLs: string[], crossorigin: boolean);
-
-		public listeners(eventName: string): Function[];
-		public emit(eventName: string, data?: any): boolean;
-		public dispatchEvent(eventName: string, data?: any): boolean;
-		public on(eventName: string, fn: Function): Function;
-		public addEventListener(eventName: string, fn: Function): Function;
-		public once(eventName: string, fn: Function): Function;
-		public off(eventName: string, fn: Function): Function;
-		public removeAllEventListeners(eventName: string): void;
-
-		public load(): void;
-
-	}
-
-	export class AtlasLoader implements Mixin {
-
-		public url: string;
-		public baseUrl: string;
-		public crossorigin: boolean;
-		public loaded: boolean;
-
-		public constructor(url: string, crossorigin: boolean);
-
-		public listeners(eventName: string): Function[];
-		public emit(eventName: string, data?: any): boolean;
-		public dispatchEvent(eventName: string, data?: any): boolean;
-		public on(eventName: string, fn: Function): Function;
-		public addEventListener(eventName: string, fn: Function): Function;
-		public once(eventName: string, fn: Function): Function;
-		public off(eventName: string, fn: Function): Function;
-		public removeAllEventListeners(eventName: string): void;
-
-		public load(): void;
 
 	}
 
@@ -273,6 +176,7 @@ declare namespace PIXI {
 		 *
 		 * @param canvas The canvas element source of the texture
 		 * @param scaleMode See {{#crossLink "PIXI/scaleModes:property"}}PIXI.scaleModes{{/crossLink}} for possible values
+		 * @param resolution the resolution of the texture (for HiDPI displays)
 		 */
 		public static fromCanvas(canvas: HTMLCanvasElement, scaleMode?: scaleModes): BaseTexture;
 
@@ -281,6 +185,7 @@ declare namespace PIXI {
 		 *
 		 * @param source the source object (image or canvas)
 		 * @param scaleMode See {{#crossLink "PIXI/scaleModes:property"}}PIXI.scaleModes{{/crossLink}} for possible values
+		 * @param resolution the resolution of the texture (for HiDPI displays)
 		 */
 		public constructor(source: HTMLImageElement, scaleMode: scaleModes);
 
@@ -289,6 +194,7 @@ declare namespace PIXI {
 		 *
 		 * @param source the source object (image or canvas)
 		 * @param scaleMode See {{#crossLink "PIXI/scaleModes:property"}}PIXI.scaleModes{{/crossLink}} for possible values
+		 * @param resolution the resolution of the texture (for HiDPI displays)
 		 */
 		public constructor(source: HTMLCanvasElement, scaleMode: scaleModes);
 
@@ -339,6 +245,11 @@ declare namespace PIXI {
 		public source: HTMLImageElement;
 
 		/**
+		 * The multi texture batching index number.
+		 */
+		public textureIndex: number;
+
+		/**
 		 * [read-only] The width of the base texture set when the image has loaded
 		 */
 		public width: number;
@@ -357,8 +268,8 @@ declare namespace PIXI {
 		 * Then calls BaseTexture.dirty.
 		 * Important for when you don't want to modify the source object by forcing in `complete` or dimension properties it may not have.
 		 *
-		 * @param width - The new width to force the BaseTexture to be.
-		 * @param height - The new height to force the BaseTexture to be.
+		 * @param width The new width to force the BaseTexture to be.
+		 * @param height The new height to force the BaseTexture to be.
 		 */
 		public forceLoaded(width: number, height: number): void;
 
@@ -377,48 +288,6 @@ declare namespace PIXI {
 		 * Atexture is still 100% usable and will simply be reuploaded if there is a sprite on screen that is using it.
 		 */
 		public unloadFromGPU(): void;
-
-	}
-
-	export class BitmapFontLoader implements Mixin {
-
-		public constructor(url: string, crossorigin: boolean);
-
-		public baseUrl: string;
-		public crossorigin: boolean;
-		public texture: Texture;
-		public url: string;
-
-		public listeners(eventName: string): Function[];
-		public emit(eventName: string, data?: any): boolean;
-		public dispatchEvent(eventName: string, data?: any): boolean;
-		public on(eventName: string, fn: Function): Function;
-		public addEventListener(eventName: string, fn: Function): Function;
-		public once(eventName: string, fn: Function): Function;
-		public off(eventName: string, fn: Function): Function;
-		public removeAllEventListeners(eventName: string): void;
-
-		public load(): void;
-
-	}
-
-	export class BlurFilter extends AbstractFilter {
-
-		public blur: number;
-		public blurX: number;
-		public blurY: number;
-
-	}
-
-	export class BlurXFilter extends AbstractFilter {
-
-		public blur: number;
-
-	}
-
-	export class BlurYFilter extends AbstractFilter {
-
-		public blur: number;
 
 	}
 
@@ -476,54 +345,6 @@ declare namespace PIXI {
 	}
 
 	/**
-	 * The CanvasPool is a global static object that allows Pixi and Phaser to pool canvas DOM elements.
-	 */
-	export class CanvasPool {
-
-		/**
-		 * Creates a new Canvas DOM element, or pulls one from the pool if free.
-		 *
-		 * @param parent The parent of the canvas element.
-		 * @param width The width of the canvas element.
-		 * @param height The height of the canvas element.
-		 * @return The canvas element.
-		 */
-		public static create(parent: HTMLElement, width?: number, height?: number): HTMLCanvasElement;
-
-		/**
-		 * Gets the first free canvas index from the pool.
-		 */
-		public static getFirst(): HTMLCanvasElement;
-
-		/**
-		 * Removes the parent from a canvas element from the pool, freeing it up for re-use.
-		 *
-		 * @param parent The parent of the canvas element.
-		 */
-		public static remove(parent: HTMLElement): void;
-
-		/**
-		 * Removes the parent from a canvas element from the pool, freeing it up for re-use.
-		 *
-		 * @param canvas The canvas element to remove
-		 */
-		public static removeByCanvas(canvas: HTMLCanvasElement): HTMLCanvasElement;
-
-		/**
-		 * Gets the total number of used canvas elements in the pool.
-		 * @return The number of in-use (parented) canvas elements in the pool.
-		 */
-		public static getTotal(): number;
-
-		/**
-		 * Gets the total number of free canvas elements in the pool.
-		 * @return The number of free (un-parented) canvas elements in the pool.
-		 */
-		public static getFree(): number;
-
-	}
-
-	/**
 	 * A set of functions used to handle masking.
 	 */
 	export class CanvasMaskManager {
@@ -559,6 +380,9 @@ declare namespace PIXI {
 		 */
 		public constructor(game: Phaser.Game);
 
+		/**
+		 * A reference to the Phaser Game instance.
+		 */
 		public game: Phaser.Game;
 
 		/**
@@ -620,6 +444,10 @@ declare namespace PIXI {
 		 * Internal const.
 		 */
 		public count: number;
+
+		/**
+		 * Instance of a PIXI.CanvasMaskManager, handles masking when using the canvas renderer
+		 */
 		public maskManager: CanvasMaskManager;
 
 		/**
@@ -641,6 +469,7 @@ declare namespace PIXI {
 		 * @param height the new height of the canvas view
 		 */
 		public resize(width: number, height: number): void;
+		public setTexturePriority(textureNameCollection: string[]): string[];
 
 		/**
 		 * Removes everything from the renderer and optionally removes the Canvas DOM element.
@@ -676,106 +505,237 @@ declare namespace PIXI {
 		public static tintWithOverlay(texture: Texture, color: number, canvas: HTMLCanvasElement): void;
 		public static tintWithPerPixel(texture: Texture, color: number, canvas: HTMLCanvasElement): void;
 
-		/**
-		 * Whether or not the Canvas BlendModes are supported, consequently the ability to tint using the multiply method.
-		 */
 		public static canUseMultiply: boolean;
 		public static tintMethod: any;
 
 	}
 
-	export class Circle implements HitArea {
-
-		public constructor(x: number, y: number, radius: number);
-
-		public x: number;
-		public y: number;
-		public radius: number;
-
-		public clone(): Circle;
-		public contains(x: number, y: number): boolean;
-		public getBounds(): Rectangle;
-
-	}
-
-	export class ColorMatrixFilter extends AbstractFilter {
-
-		public constructor();
-
-		public matrix: number[];
-
-	}
-
-	export class ColorStepFilter extends AbstractFilter {
-
-		public step: number;
-
-	}
-
-	export class ConvolutionFilter extends AbstractFilter {
-
-		public constructor(matrix: number[], width: number, height: number);
-
-		public matrix: Matrix;
-		public width: number;
-		public height: number;
-
-	}
-
-	export class CrossHatchFilter extends AbstractFilter {
-
-		public blur: number;
-
-	}
-
-	export class DisplacementFilter extends AbstractFilter {
-
-		public constructor(texture: Texture);
-
-		public map: Texture;
-		public offset: Point;
-		public scale: Point;
-
-	}
-
-	export class DotScreenFilter extends AbstractFilter {
-
-		public angle: number;
-		public scale: Point;
-
-	}
-
+	/**
+	 * The base class for all objects that are rendered. Contains properties for position, scaling,
+	 * rotation, masks and cache handling.
+	 *
+	 * This is an abstract class and should not be used on its own, rather it should be extended.
+	 *
+	 * It is used internally by the likes of PIXI.Sprite.
+	 */
 	export class DisplayObject {
 
+		/**
+		 * The alpha value of this DisplayObject. A value of 1 is fully opaque. A value of 0 is transparent.
+		 * Please note that an object with an alpha value of 0 is skipped during the render pass.
+		 *
+		 * The value of this property does not reflect any alpha values set further up the display list.
+		 * To obtain that value please see the `worldAlpha` property.
+		 * Default: 1
+		 */
 		public alpha: number;
 		public buttonMode: boolean;
+
+		/**
+		 * Sets if this DisplayObject should be cached as a bitmap.
+		 *
+		 * When invoked it will take a snapshot of the DisplayObject, as it is at that moment, and store it
+		 * in a RenderTexture. This is then used whenever this DisplayObject is rendered. It can provide a
+		 * performance benefit for complex, but static, DisplayObjects. I.e. those with lots of children.
+		 *
+		 * Transparent areas adjoining the edges may be removed ({@link https://github.com/photonstorm/phaser-ce/issues/283 #283}).
+		 *
+		 * Cached Bitmaps do not track their parents. If you update a property of this DisplayObject, it will not
+		 * re-generate the cached bitmap automatically. To do that you need to call `DisplayObject.updateCache`.
+		 *
+		 * To remove a cached bitmap, set this property to `null`. Cache this DisplayObject as a Bitmap. Set to `null` to remove an existing cached bitmap.
+		 */
 		public cacheAsBitmap: boolean;
 		public defaultCursor: string;
+
+		/**
+		 * The rectangular area used by filters when rendering a shader for this DisplayObject.
+		 */
 		public filterArea: Rectangle;
+
+		/**
+		 * Sets the filters for this DisplayObject. This is a WebGL only feature, and is ignored by the Canvas
+		 * Renderer. A filter is a shader applied to this DisplayObject. You can modify the placement of the filter
+		 * using `DisplayObject.filterArea`.
+		 *
+		 * To remove filters, set this property to `null`.
+		 *
+		 * Note: You cannot have a filter set, and a MULTIPLY Blend Mode active, at the same time. Setting a
+		 * filter will reset this DisplayObjects blend mode to NORMAL. An Array of Phaser.Filter objects, or objects that extend them.
+		 */
 		public filters: AbstractFilter[];
+
+		/**
+		 * This is the defined area that will pick up mouse / touch events. It is null by default.
+		 * Setting it is a neat way of optimising the hitTest function that the interactionManager will use (as it will not need to hit test all the children)
+		 */
 		public hitArea: HitArea;
 		public interactive: boolean;
-		public mask: Graphics;
+
+		/**
+		 * Sets a mask for this DisplayObject. A mask is an instance of a Graphics object.
+		 * When applied it limits the visible area of this DisplayObject to the shape of the mask.
+		 * Under a Canvas renderer it uses shape clipping. Under a WebGL renderer it uses a Stencil Buffer.
+		 * To remove a mask, set this property to `null`. The mask applied to this DisplayObject. Set to `null` to remove an existing mask.
+		 */
+		public mask: Phaser.Graphics;
+
+		/**
+		 * The parent DisplayObjectContainer that this DisplayObject is a child of.
+		 * All DisplayObjects must belong to a parent in order to be rendered.
+		 * The root parent is the Stage object. This property is set automatically when the
+		 * DisplayObject is added to, or removed from, a DisplayObjectContainer.
+		 */
 		public parent: DisplayObjectContainer;
+
+		/**
+		 * The pivot point of this DisplayObject that it rotates around. The values are expressed
+		 * in pixel values.
+		 */
 		public pivot: Point;
+
+		/**
+		 * The coordinates, in pixels, of this DisplayObject, relative to its parent container.
+		 *
+		 * The value of this property does not reflect any positioning happening further up the display list.
+		 * To obtain that value please see the `worldPosition` property.
+		 */
 		public position: Point;
+
+		/**
+		 * Should this DisplayObject be rendered by the renderer? An object with a renderable value of
+		 * `false` is skipped during the render pass.
+		 */
 		public renderable: boolean;
+
+		/**
+		 * The rotation of this DisplayObject. The value is given, and expressed, in radians, and is based on
+		 * a right-handed orientation.
+		 *
+		 * The value of this property does not reflect any rotation happening further up the display list.
+		 * To obtain that value please see the `worldRotation` property.
+		 */
 		public rotation: number;
+
+		/**
+		 * The scale of this DisplayObject. A scale of 1:1 represents the DisplayObject
+		 * at its default size. A value of 0.5 would scale this DisplayObject by half, and so on.
+		 *
+		 * The value of this property does not reflect any scaling happening further up the display list.
+		 * To obtain that value please see the `worldScale` property.
+		 */
 		public scale: Point;
 		public stage: DisplayObjectContainer;
+
+		/**
+		 * The visibility of this DisplayObject. A value of `false` makes the object invisible.
+		 * A value of `true` makes it visible.
+		 *
+		 * An object with a visible value of `false` is skipped during the render pass.
+		 * Equally a DisplayObject with visible `false` will not render any of its children.
+		 *
+		 * The value of this property does not reflect any visible values set further up the display list.
+		 * To obtain that value please see the {@link PIXI.DisplayObject#worldVisible worldVisible} property.
+		 *
+		 * Objects that are not {@link PIXI.DisplayObject#worldVisible worldVisible} do not update their {@link PIXI.DisplayObject#worldPosition worldPosition}.
+		 * Default: true
+		 */
 		public visible: boolean;
+
+		/**
+		 * The multiplied alpha value of this DisplayObject. A value of 1 is fully opaque. A value of 0 is transparent.
+		 * This value is the calculated total, based on the alpha values of all parents of this DisplayObjects
+		 * in the display list.
+		 *
+		 * To obtain, and set, the local alpha value, see the `alpha` property.
+		 *
+		 * Note: This property is only updated at the end of the `updateTransform` call, once per render. Until
+		 * that happens this property will contain values based on the previous frame. Be mindful of this if
+		 * accessing this property outside of the normal game flow, i.e. from an asynchronous event callback.
+		 */
 		public worldAlpha: number;
+
+		/**
+		 * The coordinates, in pixels, of this DisplayObject within the world.
+		 *
+		 * This property contains the calculated total, based on the positions of all parents of this
+		 * DisplayObject in the display list.
+		 *
+		 * Note: This property is only updated at the end of the `updateTransform` call, once per render. Until
+		 * that happens this property will contain values based on the previous frame. Be mindful of this if
+		 * accessing this property outside of the normal game flow, i.e. from an asynchronous event callback.
+		 */
 		public worldPosition: Point;
+
+		/**
+		 * The global scale of this DisplayObject.
+		 *
+		 * This property contains the calculated total, based on the scales of all parents of this
+		 * DisplayObject in the display list.
+		 *
+		 * Note: This property is only updated at the end of the `updateTransform` call, once per render. Until
+		 * that happens this property will contain values based on the previous frame. Be mindful of this if
+		 * accessing this property outside of the normal game flow, i.e. from an asynchronous event callback.
+		 */
 		public worldScale: Point;
+
+		/**
+		 * The current transform of this DisplayObject.
+		 *
+		 * This property contains the calculated total, based on the transforms of all parents of this
+		 * DisplayObject in the display list.
+		 *
+		 * Note: This property is only updated at the end of the `updateTransform` call, once per render. Until
+		 * that happens this property will contain values based on the previous frame. Be mindful of this if
+		 * accessing this property outside of the normal game flow, i.e. from an asynchronous event callback.
+		 */
 		public worldTransform: Matrix;
+
+		/**
+		 * The rotation, in radians, of this DisplayObject.
+		 *
+		 * This property contains the calculated total, based on the rotations of all parents of this
+		 * DisplayObject in the display list.
+		 *
+		 * Note: This property is only updated at the end of the `updateTransform` call, once per render. Until
+		 * that happens this property will contain values based on the previous frame. Be mindful of this if
+		 * accessing this property outside of the normal game flow, i.e. from an asynchronous event callback.
+		 */
 		public worldRotation: number;
+
+		/**
+		 * Indicates if this DisplayObject is visible, based on it, and all of its parents, `visible` property values.
+		 */
 		public worldVisible: boolean;
+
+		/**
+		 * The horizontal position of the DisplayObject, in pixels, relative to its parent.
+		 * If you need the world position of the DisplayObject, use `DisplayObject.worldPosition` instead.
+		 */
 		public x: number;
+
+		/**
+		 * The vertical position of the DisplayObject, in pixels, relative to its parent.
+		 * If you need the world position of the DisplayObject, use `DisplayObject.worldPosition` instead.
+		 */
 		public y: number;
 
 		public click(e: InteractionData): void;
 		public displayObjectUpdateTransform(parent?: DisplayObjectContainer): void;
-		public generateTexture(resolution?: number, scaleMode?: number, renderer?: PixiRenderer | number): RenderTexture;
+
+		/**
+		 * Generates a RenderTexture based on this DisplayObject, which can they be used to texture other Sprites.
+		 * This can be useful if your DisplayObject is static, or complicated, and needs to be reused multiple times.
+		 *
+		 * Please note that no garbage collection takes place on old textures. It is up to you to destroy old textures,
+		 * and references to them, so they don't linger in memory.
+		 *
+		 * @param resolution The resolution of the texture being generated. - Default: 1
+		 * @param scaleMode See {{#crossLink "PIXI/scaleModes:property"}}PIXI.scaleModes{{/crossLink}} for possible values. - Default: PIXI.scaleModes.DEFAULT
+		 * @param renderer The renderer used to generate the texture.
+		 * @return - A RenderTexture containing an image of this DisplayObject at the time it was invoked.
+		 */
+		public generateTexture(resolution?: number, scaleMode?: number, renderer?: PixiRenderer | number): Phaser.RenderTexture;
 		public mousedown(e: InteractionData): void;
 		public mouseout(e: InteractionData): void;
 		public mouseover(e: InteractionData): void;
@@ -788,13 +748,53 @@ declare namespace PIXI {
 		public rightupoutside(e: InteractionData): void;
 		public setStageReference(stage: DisplayObjectContainer): void;
 		public tap(e: InteractionData): void;
+
+		/**
+		 * Calculates the global position of this DisplayObject, based on the position given.
+		 *
+		 * @param position The global position to calculate from.
+		 * @return - A point object representing the position of this DisplayObject based on the global position given.
+		 */
 		public toGlobal(position: Point): Point;
+
+		/**
+		 * Calculates the local position of this DisplayObject, relative to another point.
+		 *
+		 * @param position The world origin to calculate from.
+		 * @param from An optional DisplayObject to calculate the global position from.
+		 * @return - A point object representing the position of this DisplayObject based on the global position given.
+		 */
 		public toLocal(position: Point, from: DisplayObject): Point;
 		public touchend(e: InteractionData): void;
 		public touchendoutside(e: InteractionData): void;
 		public touchstart(e: InteractionData): void;
 		public touchmove(e: InteractionData): void;
+
+		/**
+		 * Updates the transform matrix this DisplayObject uses for rendering.
+		 *
+		 * If the object has no parent, and no parent parameter is provided, it will default to
+		 * Phaser.Game.World as the parent transform to use. If that is unavailable the transform fails to take place.
+		 *
+		 * The `parent` parameter has priority over the actual parent. Use it as a parent override.
+		 * Setting it does **not** change the actual parent of this DisplayObject.
+		 *
+		 * Calling this method updates the `worldTransform`, `worldAlpha`, `worldPosition`, `worldScale`
+		 * and `worldRotation` properties.
+		 *
+		 * If a `transformCallback` has been specified, it is called at the end of this method, and is passed
+		 * the new, updated, worldTransform property, along with the parent transform used.
+		 *
+		 * @param parent Optional parent to calculate this DisplayObjects transform from.
+		 * @return - A reference to this DisplayObject.
+		 */
 		public updateTransform(parent?: DisplayObjectContainer): void;
+
+		/**
+		 * If this DisplayObject has a cached Sprite, this method generates and updates it.
+		 * @return - A reference to this DisplayObject.
+		 */
+		public updateCache(): void;
 
 	}
 
@@ -917,93 +917,17 @@ declare namespace PIXI {
 		/**
 		 * Swaps the position of 2 Display Objects within this container.
 		 *
-		 * @param child -
-		 * @param child2 -
+		 * @param child
+		 * @param child2
 		 */
 		public swapChildren(child: DisplayObject, child2: DisplayObject): void;
 
 		/**
 		 * Determines whether the specified display object is a child of the DisplayObjectContainer instance or the instance itself.
 		 *
-		 * @param child -
+		 * @param child
 		 */
 		public contains(child: DisplayObject): boolean;
-
-	}
-
-	export class Ellipse implements HitArea {
-
-		public constructor(x: number, y: number, width: number, height: number);
-
-		public x: number;
-		public y: number;
-		public width: number;
-		public height: number;
-
-		public clone(): Ellipse;
-		public contains(x: number, y: number): boolean;
-		public getBounds(): Rectangle;
-
-	}
-
-	/**
-	 * Creates an homogenous object for tracking events so users can know what to expect.
-	 */
-	export class Event {
-
-		/**
-		 * Creates an homogenous object for tracking events so users can know what to expect.
-		 *
-		 * @param target The target object that the event is called on
-		 * @param name The string name of the event that was triggered
-		 * @param data Arbitrary event data to pass along
-		 */
-		public constructor(target: any, name: string, data: any);
-
-		/**
-		 * The original target the event triggered on.
-		 */
-		public target: any;
-
-		/**
-		 * The string name of the event that this represents.
-		 */
-		public type: string;
-
-		/**
-		 * The data that was passed in with this event.
-		 */
-		public data: any;
-
-		/**
-		 * The timestamp when the event occurred.
-		 */
-		public timeStamp: number;
-
-		/**
-		 * Stops the propagation of events up the scene graph (prevents bubbling).
-		 */
-		public stopPropagation(): void;
-		public preventDefault(): void;
-
-		/**
-		 * Stops the propagation of events to sibling listeners (no longer calls any listeners).
-		 */
-		public stopImmediatePropagation(): void;
-
-	}
-
-	/**
-	 * Mixins event emitter functionality to a class
-	 */
-	export class EventTarget {
-
-		/**
-		 * Mixes in the properties of the EventTarget prototype onto another object
-		 *
-		 * @param object The obj to mix into
-		 */
-		public static mixin(obj: any): void;
 
 	}
 
@@ -1046,262 +970,6 @@ declare namespace PIXI {
 
 	}
 
-	/**
-	 * A GraphicsData object.
-	 */
-	export class GraphicsData {
-
-		/**
-		 * A GraphicsData object.
-		 */
-		public constructor(lineWidth?: number, lineColor?: number, lineAlpha?: number, fillColor?: number, fillAlpha?: number, fill?: boolean, shape?: any);
-
-		public lineWidth: number;
-		public lineColor: number;
-		public lineAlpha: number;
-		public fillColor: number;
-		public fillAlpha: number;
-		public fill: boolean;
-		public shape: any;
-		public type: number;
-
-	}
-
-	/**
-	 * The Graphics class contains methods used to draw primitive shapes such as lines, circles and rectangles to the display, and color and fill them.
-	 */
-	export class Graphics extends DisplayObjectContainer {
-
-		public static POLY: number;
-		public static RECT: number;
-		public static CIRC: number;
-		public static ELIP: number;
-		public static RREC: number;
-
-		/**
-		 * The blend mode to be applied to the graphic shape. Apply a value of PIXI.blendModes.NORMAL to reset the blend mode.
-		 * Default: PIXI.blendModes.NORMAL;
-		 */
-		public blendMode: number;
-
-		/**
-		 * The bounds' padding used for bounds calculation.
-		 */
-		public boundsPadding: number;
-
-		/**
-		 * The alpha value used when filling the Graphics object.
-		 */
-		public fillAlpha: number;
-
-		/**
-		 * Whether this shape is being used as a mask.
-		 */
-		public isMask: boolean;
-
-		/**
-		 * The width (thickness) of any lines drawn.
-		 */
-		public lineWidth: number;
-
-		/**
-		 * The color of any lines drawn.
-		 * Default: 0
-		 */
-		public lineColor: number;
-
-		/**
-		 * The tint applied to the graphic shape. This is a hex value. Apply a value of 0xFFFFFF to reset the tint.
-		 * Default: 0xFFFFFF
-		 */
-		public tint: number;
-		public worldAlpha: number;
-
-		/**
-		 * The arc method creates an arc/curve (used to create circles, or parts of circles).
-		 *
-		 * @param cx The x-coordinate of the center of the circle
-		 * @param cy The y-coordinate of the center of the circle
-		 * @param radius The radius of the circle
-		 * @param startAngle The starting angle, in radians (0 is at the 3 o'clock position of the arc's circle)
-		 * @param endAngle The ending angle, in radians
-		 * @param anticlockwise Optional. Specifies whether the drawing should be counterclockwise or clockwise. False is default, and indicates clockwise, while true indicates counter-clockwise.
-		 * @param segments Optional. The number of segments to use when calculating the arc. The default is 40. If you need more fidelity use a higher number.
-		 */
-		public arc(cx: number, cy: number, radius: number, startAngle: number, endAngle: number, anticlockwise: boolean): Graphics;
-		public arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): Graphics;
-
-		/**
-		 * Specifies a simple one-color fill that subsequent calls to other Graphics methods
-		 * (such as lineTo() or drawCircle()) use when drawing.
-		 *
-		 * @param color the color of the fill
-		 * @param alpha the alpha of the fill
-		 */
-		public beginFill(color?: number, alpha?: number): Graphics;
-
-		/**
-		 * Calculate the points for a bezier curve and then draws it.
-		 *
-		 * @param cpX Control point x
-		 * @param cpY Control point y
-		 * @param cpX2 Second Control point x
-		 * @param cpY2 Second Control point y
-		 * @param toX Destination point x
-		 * @param toY Destination point y
-		 */
-		public bezierCurveTo(cpX: number, cpY: number, cpX2: number, cpY2: number, toX: number, toY: number): Graphics;
-
-		/**
-		 * Clears the graphics that were drawn to this Graphics object, and resets fill and line style settings.
-		 */
-		public clear(): Graphics;
-
-		/**
-		 * Destroys a previous cached sprite.
-		 */
-		public destroyCachedSprite(): void;
-
-		/**
-		 * Draws a circle.
-		 *
-		 * @param x The X coordinate of the center of the circle
-		 * @param y The Y coordinate of the center of the circle
-		 * @param diameter The diameter of the circle
-		 */
-		public drawCircle(x: number, y: number, diameter: number): Graphics;
-
-		/**
-		 * Draws an ellipse.
-		 *
-		 * @param x The X coordinate of the center of the ellipse
-		 * @param y The Y coordinate of the center of the ellipse
-		 * @param width The half width of the ellipse
-		 * @param height The half height of the ellipse
-		 */
-		public drawEllipse(x: number, y: number, width: number, height: number): Graphics;
-
-		/**
-		 * Draws a polygon using the given path.
-		 *
-		 * @param path The path data used to construct the polygon. Can either be an array of points or a Phaser.Polygon object.
-		 */
-		public drawPolygon(...path: any[]): Graphics;
-
-		/**
-		 *
-		 *
-		 * @param x The X coord of the top-left of the rectangle
-		 * @param y The Y coord of the top-left of the rectangle
-		 * @param width The width of the rectangle
-		 * @param height The height of the rectangle
-		 */
-		public drawRect(x: number, y: number, width: number, height: number): Graphics;
-
-		/**
-		 *
-		 *
-		 * @param x The X coord of the top-left of the rectangle
-		 * @param y The Y coord of the top-left of the rectangle
-		 * @param width The width of the rectangle
-		 * @param height The height of the rectangle
-		 * @param radius Radius of the rectangle corners. In WebGL this must be a value between 0 and 9.
-		 */
-		public drawRoundedRect(x: number, y: number, width: number, height: number, radius: number): Graphics;
-
-		/**
-		 * Draws the given shape to this Graphics object. Can be any of Circle, Rectangle, Ellipse, Line or Polygon.
-		 *
-		 * @param shape The Shape object to draw.
-		 * @return The generated GraphicsData object.
-		 */
-		public drawShape(shape: Circle): GraphicsData;
-
-		/**
-		 * Draws the given shape to this Graphics object. Can be any of Circle, Rectangle, Ellipse, Line or Polygon.
-		 *
-		 * @param shape The Shape object to draw.
-		 * @return The generated GraphicsData object.
-		 */
-		public drawShape(shape: Rectangle): GraphicsData;
-
-		/**
-		 * Draws the given shape to this Graphics object. Can be any of Circle, Rectangle, Ellipse, Line or Polygon.
-		 *
-		 * @param shape The Shape object to draw.
-		 * @return The generated GraphicsData object.
-		 */
-		public drawShape(shape: Ellipse): GraphicsData;
-
-		/**
-		 * Draws the given shape to this Graphics object. Can be any of Circle, Rectangle, Ellipse, Line or Polygon.
-		 *
-		 * @param shape The Shape object to draw.
-		 * @return The generated GraphicsData object.
-		 */
-		public drawShape(shape: Polygon): GraphicsData;
-
-		/**
-		 * Applies a fill to the lines and shapes that were added since the last call to the beginFill() method.
-		 */
-		public endFill(): Graphics;
-
-		/**
-		 * Useful function that returns a texture of the graphics object that can then be used to create sprites
-		 * This can be quite useful if your geometry is complicated and needs to be reused multiple times.
-		 *
-		 * @param resolution The resolution of the texture being generated - Default: 1
-		 * @param scaleMode Should be one of the PIXI.scaleMode consts
-		 * @param padding Add optional extra padding to the generated texture (default 0)
-		 * @return a texture of the graphics object
-		 */
-		public generateTexture(resolution?: number, scaleMode?: number, padding?: number): RenderTexture;
-
-		/**
-		 * Specifies the line style used for subsequent calls to Graphics methods such as the lineTo() method or the drawCircle() method.
-		 *
-		 * @param lineWidth width of the line to draw, will update the objects stored style
-		 * @param color color of the line to draw, will update the objects stored style
-		 * @param alpha alpha of the line to draw, will update the objects stored style
-		 */
-		public lineStyle(lineWidth?: number, color?: number, alpha?: number): Graphics;
-
-		/**
-		 * Draws a line using the current line style from the current drawing position to (x, y);
-		 * The current drawing position is then set to (x, y).
-		 *
-		 * @param x the X coordinate to draw to
-		 * @param y the Y coordinate to draw to
-		 */
-		public lineTo(x: number, y: number): Graphics;
-
-		/**
-		 * Moves the current drawing position to x, y.
-		 *
-		 * @param x the X coordinate to move to
-		 * @param y the Y coordinate to move to
-		 */
-		public moveTo(x: number, y: number): Graphics;
-
-		/**
-		 * Calculate the points for a quadratic bezier curve and then draws it.
-		 * Based on: https://stackoverflow.com/questions/785097/how-do-i-implement-a-bezier-curve-in-c
-		 *
-		 * @param cpX Control point x
-		 * @param cpY Control point y
-		 * @param toX Destination point x
-		 * @param toY Destination point y
-		 */
-		public quadraticCurveTo(cpX: number, cpY: number, toX: number, toY: number): Graphics;
-
-	}
-
-	export class GrayFilter extends AbstractFilter {
-
-		public gray: number;
-
-	}
-
 	export class ImageLoader implements Mixin {
 
 		public constructor(url: string, crossorigin?: boolean);
@@ -1332,56 +1000,7 @@ declare namespace PIXI {
 
 	}
 
-	export class InteractionManager {
-
-		public currentCursorStyle: string;
-		public last: number;
-		public mouse: InteractionData;
-		public mouseOut: boolean;
-		public mouseoverEnabled: boolean;
-		public onMouseMove: Function;
-		public onMouseDown: Function;
-		public onMouseOut: Function;
-		public onMouseUp: Function;
-		public onTouchStart: Function;
-		public onTouchEnd: Function;
-		public onTouchMove: Function;
-		public pool: InteractionData[];
-		public resolution: number;
-		public stage: DisplayObjectContainer;
-		public touches: { [id: string]: InteractionData };
-
-		public constructor(stage: DisplayObjectContainer);
-	}
-
-	export class InvertFilter extends AbstractFilter {
-
-		public invert: number;
-
-	}
-
-	export class JsonLoader implements Mixin {
-
-		public constructor(url: string, crossorigin?: boolean);
-
-		public baseUrl: string;
-		public crossorigin: boolean;
-		public loaded: boolean;
-		public url: string;
-
-		public listeners(eventName: string): Function[];
-		public emit(eventName: string, data?: any): boolean;
-		public dispatchEvent(eventName: string, data?: any): boolean;
-		public on(eventName: string, fn: Function): Function;
-		public addEventListener(eventName: string, fn: Function): Function;
-		public once(eventName: string, fn: Function): Function;
-		public off(eventName: string, fn: Function): Function;
-		public removeAllEventListeners(eventName: string): void;
-
-		public load(): void;
-
-	}
-
+	// Phaser.Matrix is used instead
 	export class Matrix {
 
 		public a: number;
@@ -1414,26 +1033,6 @@ declare namespace PIXI {
 		once(eventName: string, fn: Function): Function;
 		off(eventName: string, fn: Function): Function;
 		removeAllEventListeners(eventName: string): void;
-
-	}
-
-	export class NoiseFilter extends AbstractFilter {
-
-		public noise: number;
-
-	}
-
-	export class NormalMapFilter extends AbstractFilter {
-
-		public map: Texture;
-		public offset: Point;
-		public scale: Point;
-
-	}
-
-	export class PixelateFilter extends AbstractFilter {
-
-		public size: number;
 
 	}
 
@@ -1678,6 +1277,7 @@ declare namespace PIXI {
 
 	}
 
+	// Overwritten by Phaser.Point
 	export class Point {
 
 		public constructor(x?: number, y?: number);
@@ -1690,39 +1290,36 @@ declare namespace PIXI {
 
 	}
 
-	export class Polygon implements HitArea {
-
-		public constructor(points: Point[]);
-		public constructor(points: number[]);
-		public constructor(...points: Point[]);
-		public constructor(...points: number[]);
-
-		public points: any[];
-
-		public clone(): Polygon;
-		public contains(x: number, y: number): boolean;
-
-	}
-
+	// Overwritten by Phaser.Rectangle
 	export class Rectangle implements HitArea {
 
 		public constructor(x?: number, y?: number, width?: number, height?: number);
 
+		public bottom: number;
+		public bottomRight: Phaser.Point;
+		public bottomLeft: Phaser.Point;
+		public centerX: number;
+		public centerY: number;
+		public empty: boolean;
+		public halfHeight: number;
+		public halfWidth: number;
+		public height: number;
+		public left: number;
+		public perimeter: number;
+		public randomX: number;
+		public randomY: number;
+		public right: number;
+		public top: number;
+		public topLeft: Phaser.Point;
+		public topRight: Phaser.Point;
+		public type: number;
+		public volume: number;
+		public width: number;
 		public x: number;
 		public y: number;
-		public width: number;
-		public height: number;
 
 		public clone(): Rectangle;
 		public contains(x: number, y: number): boolean;
-
-	}
-
-	export class RGBSplitFilter extends AbstractFilter {
-
-		public red: Point;
-		public green: Point;
-		public blue: Point;
 
 	}
 
@@ -1731,73 +1328,10 @@ declare namespace PIXI {
 		public points: Point[];
 		public vertices: number[];
 
-		/**
-		 *
-		 *
-		 * @param texture - The texture to use on the rope.
-		 * @param points - An array of {PIXI.Point}.
-		 */
 		public constructor(texture: Texture, points: Point[]);
 
 		public refresh(): void;
 		public setTexture(texture: Texture): void;
-
-	}
-
-	export class RoundedRectangle implements HitArea {
-
-		public constructor(x?: number, y?: number, width?: number, height?: number, radius?: number);
-
-		public x: number;
-		public y: number;
-		public width: number;
-		public height: number;
-		public radius: number;
-
-		public clone(): RoundedRectangle;
-		public contains(x: number, y: number): boolean;
-
-	}
-
-	export class SepiaFilter extends AbstractFilter {
-
-		public sepia: number;
-
-	}
-
-	export class SmartBlurFilter extends AbstractFilter {
-
-		public blur: number;
-
-	}
-
-	export class SpineLoader implements Mixin {
-
-		public url: string;
-		public crossorigin: boolean;
-		public loaded: boolean;
-
-		public constructor(url: string, crossOrigin: boolean);
-
-		public listeners(eventName: string): Function[];
-		public emit(eventName: string, data?: any): boolean;
-		public dispatchEvent(eventName: string, data?: any): boolean;
-		public on(eventName: string, fn: Function): Function;
-		public addEventListener(eventName: string, fn: Function): Function;
-		public once(eventName: string, fn: Function): Function;
-		public off(eventName: string, fn: Function): Function;
-		public removeAllEventListeners(eventName: string): void;
-
-		public load(): void;
-
-	}
-
-	export class SpineTextureLoader {
-
-		public constructor(basePath: string, crossorigin: boolean);
-
-		public load(page: AtlasPage, file: string): void;
-		public unload(texture: BaseTexture): void;
 
 	}
 
@@ -1815,9 +1349,11 @@ declare namespace PIXI {
 
 		/**
 		 * The anchor sets the origin point of the texture.
-		 * The default is 0,0 this means the texture's origin is the top left
-		 * Setting than anchor to 0.5,0.5 means the textures origin is centered
-		 * Setting the anchor to 1,1 would mean the textures origin points will be the bottom right corner
+		 * The default (0, 0) is the top left.
+		 * (0.5, 0.5) is the center.
+		 * (1, 1) is the bottom right.
+		 *
+		 * You can modify the default values in PIXI.Sprite.defaultAnchor.
 		 */
 		public anchor: Point;
 
@@ -1830,7 +1366,7 @@ declare namespace PIXI {
 		public blendMode: blendModes;
 
 		/**
-		 * Controls if this Sprite is processed by the core Phaser game loops and Group loops.
+		 * Controls if this Sprite is processed by the core Phaser game loops and Group loops (except {@link Phaser.Group#update}).
 		 * Default: true
 		 */
 		public exists: boolean;
@@ -1848,10 +1384,26 @@ declare namespace PIXI {
 		public texture: Texture;
 
 		/**
-		 * The tint applied to the sprite. This is a hex value. A value of 0xFFFFFF will remove any tint effect.
+		 * The tint applied to the sprite. This is a hex value. A value of 0xFFFFFF (Phaser.Color.WHITE) will remove any tint effect.
 		 * Default: 0xFFFFFF
 		 */
 		public tint: number;
+
+		/**
+		 * A Point-like object.
+		 * Default: {"x":0,"y":0}
+		 */
+
+							   /**
+							   * The horizontal position of the DisplayObject, in pixels, relative to its parent.
+							   * If you need the world position of the DisplayObject, use `DisplayObject.worldPosition` instead.
+							   */
+
+										  /**
+										  * The vertical position of the DisplayObject, in pixels, relative to its parent.
+										  * If you need the world position of the DisplayObject, use `DisplayObject.worldPosition` instead.
+										  */
+		public static defaultAnchor: {x: number; y: number};
 
 		/**
 		 * Sets the texture of the sprite. Be warned that this doesn't remove or destroy the previous
@@ -1864,67 +1416,14 @@ declare namespace PIXI {
 
 	}
 
-	/**
-	 * The SpriteBatch class is a really fast version of the DisplayObjectContainer
-	 * built solely for speed, so use when you need a lot of sprites or particles.
-	 * And it's extremely easy to use :
-	 *
-	 *    const container = new PIXI.SpriteBatch();
-	 *
-	 *    for(const i  = 0; i < 100; i++)
-	 *    {
-	 *        const sprite = new PIXI.Sprite.fromImage("myImage.png");
-	 *        container.addChild(sprite);
-	 *    }
-	 * And here you have a hundred sprites that will be renderer at the speed of light
-	 */
 	export class SpriteBatch extends DisplayObjectContainer {
 
-		/**
-		 * The SpriteBatch class is a really fast version of the DisplayObjectContainer
-		 * built solely for speed, so use when you need a lot of sprites or particles.
-		 * And it's extremely easy to use :
-		 *
-		 *    const container = new PIXI.SpriteBatch();
-		 *
-		 *    for(const i  = 0; i < 100; i++)
-		 *    {
-		 *        const sprite = new PIXI.Sprite.fromImage("myImage.png");
-		 *        container.addChild(sprite);
-		 *    }
-		 * And here you have a hundred sprites that will be renderer at the speed of light
-		 *
-		 * @param texture -
-		 */
 		public constructor(texture?: Texture);
 
 		public ready: boolean;
 		public textureThing: Texture;
 
 		public initWebGL(gl: WebGLRenderingContext): void;
-
-	}
-
-	export class SpriteSheetLoader implements Mixin {
-
-		public constructor(url: string, crossorigin?: boolean);
-
-		public baseUrl: string;
-		public crossorigin: boolean;
-		public frames: any;
-		public texture: Texture;
-		public url: string;
-
-		public listeners(eventName: string): Function[];
-		public emit(eventName: string, data?: any): boolean;
-		public dispatchEvent(eventName: string, data?: any): boolean;
-		public on(eventName: string, fn: Function): Function;
-		public addEventListener(eventName: string, fn: Function): Function;
-		public once(eventName: string, fn: Function): Function;
-		public off(eventName: string, fn: Function): Function;
-		public removeAllEventListeners(eventName: string): void;
-
-		public load(): void;
 
 	}
 
@@ -1937,46 +1436,17 @@ declare namespace PIXI {
 
 		};
 
-		/**
-		 *
-		 *
-		 * @param texture The texture to use
-		 * @param width the width
-		 * @param height the height
-		 */
 		public constructor(texture: Texture);
 
-		/**
-		 * The blend mode to be applied to the sprite. Set to PIXI.blendModes.NORMAL to remove any blend mode.
-		 * Default: PIXI.blendModes.NORMAL;
-		 */
 		public blendMode: number;
 		public colors: number[];
-
-		/**
-		 * Whether the strip is dirty or not
-		 */
 		public dirty: boolean;
 		public indices: number[];
-
-		/**
-		 * Triangles in canvas mode are automatically antialiased, use this value to force triangles to overlap a bit with each other.
-		 */
 		public canvasPadding: number;
-
-		/**
-		 * The texture of the strip
-		 */
 		public texture: Texture;
 		public uvs: number[];
 		public vertices: number[];
 
-		/**
-		 * Returns the bounds of the mesh as a rectangle. The bounds calculation takes the worldTransform into account.
-		 *
-		 * @param matrix the transformation matrix of the sprite
-		 * @return the framing rectangle
-		 */
 		public getBounds(matrix?: Matrix): Rectangle;
 
 	}
@@ -2055,6 +1525,13 @@ declare namespace PIXI {
 		 */
 		public valid: boolean;
 
+		/**
+		 * A flag that controls if this frame is rotated or not.
+		 * Rotation allows you to use rotated frames in texture atlas packing, it has nothing to do with
+		 * Sprite rotation.
+		 */
+		public rotated: boolean;
+
 		public listeners(eventName: string): Function[];
 		public emit(eventName: string, data?: any): boolean;
 		public dispatchEvent(eventName: string, data?: any): boolean;
@@ -2080,132 +1557,24 @@ declare namespace PIXI {
 
 	}
 
-	/**
-	 * A tiling sprite is a fast way of rendering a tiling image
-	 */
 	export class TilingSprite extends Sprite {
 
-		/**
-		 * A tiling sprite is a fast way of rendering a tiling image
-		 *
-		 * @param texture the texture of the tiling sprite
-		 * @param width the width of the tiling sprite
-		 * @param height the height of the tiling sprite
-		 */
 		public constructor(texture: Texture, width: number, height: number);
 
-		/**
-		 * The CanvasBuffer object that the tiled texture is drawn to.
-		 */
 		public canvasBuffer: PIXI.CanvasBuffer;
-
-		/**
-		 * The blend mode to be applied to the sprite
-		 * Default: PIXI.blendModes.NORMAL;
-		 */
 		public blendMode: number;
-
-		/**
-		 * If true the TilingSprite will run generateTexture on its **next** render pass.
-		 * This is set by the likes of Phaser.LoadTexture.setFrame.
-		 * Default: true
-		 */
 		public refreshTexture: boolean;
-
-		/**
-		 * The texture that the sprite is using
-		 */
 		public texture: Texture;
-
-		/**
-		 * If enabled a green rectangle will be drawn behind the generated tiling texture, allowing you to visually
-		 * debug the texture being used.
-		 */
 		public textureDebug: boolean;
-
-		/**
-		 * The tint applied to the sprite. This is a hex value
-		 * Default: 0xFFFFFF
-		 */
 		public tint: number;
-
-		/**
-		 * The offset position of the image that is being tiled
-		 */
 		public tilePosition: Point;
-
-		/**
-		 * The Context fill pattern that is used to draw the TilingSprite in Canvas mode only (will be null in WebGL).
-		 */
 		public tilePattern: PIXI.Texture;
-
-		/**
-		 * The scaling of the image that is being tiled
-		 */
 		public tileScale: Point;
-
-		/**
-		 * A point that represents the scale of the texture object
-		 */
 		public tileScaleOffset: Point;
 
 		public destroy(): void;
-
-		/**
-		 *
-		 *
-		 * @param forcePowerOfTwo Whether we want to force the texture to be a power of two
-		 * @param renderSession -
-		 */
 		public generateTilingTexture(forcePowerOfTwo?: boolean): void;
-
-		/**
-		 * Sets the texture of the sprite. Be warned that this doesn't remove or destroy the previous
-		 * texture this Sprite was using.
-		 *
-		 * @param texture The PIXI texture that is displayed by the sprite
-		 * @param destroy Call Texture.destroy on the current texture before replacing it with the new one?
-		 */
 		public setTexture(texture: Texture): void;
-
-	}
-
-	export class TiltShiftFilter extends AbstractFilter {
-
-		public blur: number;
-		public gradientBlur: number;
-		public start: number;
-		public end: number;
-
-	}
-
-	export class TiltShiftXFilter extends AbstractFilter {
-
-		public blur: number;
-		public gradientBlur: number;
-		public start: number;
-		public end: number;
-
-		public updateDelta(): void;
-
-	}
-
-	export class TiltShiftYFilter extends AbstractFilter {
-
-		public blur: number;
-		public gradientBlur: number;
-		public start: number;
-		public end: number;
-
-		public updateDelta(): void;
-
-	}
-
-	export class TwistFilter extends AbstractFilter {
-
-		public angle: number;
-		public offset: Point;
-		public radius: number;
 
 	}
 
@@ -2289,8 +1658,8 @@ declare namespace PIXI {
 		/**
 		 *
 		 *
-		 * @param spriteBatch -
-		 * @param renderSession -
+		 * @param spriteBatch
+		 * @param renderSession
 		 */
 		public begin(spriteBatch: SpriteBatch, renderSession: RenderSession): void;
 		public destroy(removeView?: boolean): void;
@@ -2299,14 +1668,14 @@ declare namespace PIXI {
 		/**
 		 *
 		 *
-		 * @param spriteBatch -
+		 * @param spriteBatch
 		 */
 		public render(spriteBatch: SpriteBatch): void;
 
 		/**
 		 *
 		 *
-		 * @param sprite -
+		 * @param sprite
 		 */
 		public renderSprite(sprite: Sprite): void;
 
@@ -2341,8 +1710,8 @@ declare namespace PIXI {
 		/**
 		 *
 		 *
-		 * @param renderSession -
-		 * @param buffer -
+		 * @param renderSession
+		 * @param buffer
 		 */
 		public begin(renderSession: RenderSession, buffer: ArrayBuffer): void;
 
@@ -2387,10 +1756,10 @@ declare namespace PIXI {
 		/**
 		 * Renders the graphics object
 		 *
-		 * @param graphics -
-		 * @param renderSession -
+		 * @param graphics
+		 * @param renderSession
 		 */
-		public static renderGraphics(graphics: Graphics, renderRession: RenderSession): void;
+		public static renderGraphics(graphics: Phaser.Graphics, renderRession: RenderSession): void;
 
 		/**
 		 * Updates the graphics object
@@ -2398,13 +1767,13 @@ declare namespace PIXI {
 		 * @param graphicsData The graphics object to update
 		 * @param gl the current WebGL drawing context
 		 */
-		public static updateGraphics(graphics: Graphics, gl: WebGLRenderingContext): void;
+		public static updateGraphics(graphics: Phaser.Graphics, gl: WebGLRenderingContext): void;
 
 		/**
 		 *
 		 *
-		 * @param webGL -
-		 * @param type -
+		 * @param webGL
+		 * @param type
 		 */
 		public static switchMode(webGL: WebGLRenderingContext, type: number): any;
 
@@ -2412,17 +1781,17 @@ declare namespace PIXI {
 		 * Builds a rectangle to draw
 		 *
 		 * @param graphicsData The graphics object containing all the necessary properties
-		 * @param webGLData -
+		 * @param webGLData
 		 */
-		public static buildRectangle(graphicsData: GraphicsData, webGLData: any): void;
+		public static buildRectangle(graphicsData: Phaser.GraphicsData, webGLData: any): void;
 
 		/**
 		 * Builds a rounded rectangle to draw
 		 *
 		 * @param graphicsData The graphics object containing all the necessary properties
-		 * @param webGLData -
+		 * @param webGLData
 		 */
-		public static buildRoundedRectangle(graphicsData: GraphicsData, webGLData: any): void;
+		public static buildRoundedRectangle(graphicsData: Phaser.GraphicsData, webGLData: any): void;
 
 		/**
 		 * Calculate the points for a quadratic bezier curve. (helper function..)
@@ -2441,33 +1810,33 @@ declare namespace PIXI {
 		 * Builds a circle to draw
 		 *
 		 * @param graphicsData The graphics object to draw
-		 * @param webGLData -
+		 * @param webGLData
 		 */
-		public static buildCircle(graphicsData: GraphicsData, webGLData: any): void;
+		public static buildCircle(graphicsData: Phaser.GraphicsData, webGLData: any): void;
 
 		/**
 		 * Builds a line to draw
 		 *
 		 * @param graphicsData The graphics object containing all the necessary properties
-		 * @param webGLData -
+		 * @param webGLData
 		 */
-		public static buildLine(graphicsData: GraphicsData, webGLData: any): void;
+		public static buildLine(graphicsData: Phaser.GraphicsData, webGLData: any): void;
 
 		/**
 		 * Builds a complex polygon to draw
 		 *
 		 * @param graphicsData The graphics object containing all the necessary properties
-		 * @param webGLData -
+		 * @param webGLData
 		 */
-		public static buildComplexPoly(graphicsData: GraphicsData, webGLData: any): void;
+		public static buildComplexPoly(graphicsData: Phaser.GraphicsData, webGLData: any): void;
 
 		/**
 		 * Builds a polygon to draw
 		 *
 		 * @param graphicsData The graphics object containing all the necessary properties
-		 * @param webGLData -
+		 * @param webGLData
 		 */
-		public static buildPoly(graphicsData: GraphicsData, webGLData: any): boolean;
+		public static buildPoly(graphicsData: Phaser.GraphicsData, webGLData: any): boolean;
 
 		public reset(): void;
 		public upload(): void;
@@ -2504,7 +1873,7 @@ declare namespace PIXI {
 		/**
 		 * Removes the last filter from the filter stack and doesn't return it.
 		 *
-		 * @param maskData -
+		 * @param maskData
 		 * @param renderSession an object containing all the useful parameters
 		 */
 		public popMask(renderSession: RenderSession): void;
@@ -2512,8 +1881,8 @@ declare namespace PIXI {
 		/**
 		 * Applies the Mask and adds it to the current filter stack.
 		 *
-		 * @param maskData -
-		 * @param renderSession -
+		 * @param maskData
+		 * @param renderSession
 		 */
 		public pushMask(maskData: any[], renderSession: RenderSession): void;
 
@@ -2546,6 +1915,9 @@ declare namespace PIXI {
 		 */
 		public constructor(game: Phaser.Game);
 
+		/**
+		 * A reference to the Phaser Game instance.
+		 */
 		public game: Phaser.Game;
 		public type: number;
 
@@ -2587,6 +1959,7 @@ declare namespace PIXI {
 		 * The height of the canvas view
 		 */
 		public height: number;
+		public currentBatchedTextures: string[];
 
 		/**
 		 * The canvas element that everything is drawn to
@@ -2670,6 +2043,30 @@ declare namespace PIXI {
 		 */
 		public mapBlendModes(): void;
 
+		/**
+		 * If Multi Texture support has been enabled, then calling this method will enable batching on the given
+		 * textures. The texture collection is an array of keys, that map to Phaser.Cache image entries.
+		 *
+		 * The number of textures that can be batched is dependent on hardware. If you provide more textures
+		 * than can be batched by the GPU, then only those at the start of the array will be used. Generally
+		 * you shouldn't provide more than 16 textures to this method. You can check the hardware limit via the
+		 * `maxTextures` property.
+		 *
+		 * You can also check the property `currentBatchedTextures` at any time, to see which textures are currently
+		 * being batched.
+		 *
+		 * To stop all textures from being batched, call this method again with an empty array.
+		 *
+		 * To change the textures being batched, call this method with a new array of image keys. The old ones
+		 * will all be purged out and no-longer batched, and the new ones enabled.
+		 *
+		 * Note: Throws a warning if you haven't enabled Multiple Texture batching support in the Phaser Game config.
+		 *
+		 * @param textureNameCollection An Array of Texture Cache keys to use for multi-texture batching.
+		 * @return An array containing the texture keys that were enabled for batching.
+		 */
+		public setTexturePriority(textureNameCollection: string[]): string[];
+
 	}
 
 	export class WebGLShaderManager {
@@ -2701,7 +2098,7 @@ declare namespace PIXI {
 		/**
 		 * Sets the current shader.
 		 *
-		 * @param shader -
+		 * @param shader
 		 */
 		public setShader(shader: IPixiShader): boolean;
 
@@ -2716,11 +2113,11 @@ declare namespace PIXI {
 		/**
 		 * TODO this does not belong here!
 		 *
-		 * @param graphics -
-		 * @param webGLData -
-		 * @param renderSession -
+		 * @param graphics
+		 * @param webGLData
+		 * @param renderSession
 		 */
-		public bindGraphics(graphics: Graphics, webGLData: any[], renderSession: RenderSession): void;
+		public bindGraphics(graphics: Phaser.Graphics, webGLData: any[], renderSession: RenderSession): void;
 
 		/**
 		 * Destroys the mask stack.
@@ -2730,12 +2127,12 @@ declare namespace PIXI {
 		/**
 		 *
 		 *
-		 * @param graphics -
-		 * @param webGLData -
-		 * @param renderSession -
+		 * @param graphics
+		 * @param webGLData
+		 * @param renderSession
 		 */
-		public popStencil(graphics: Graphics, webGLData: any[], renderSession: RenderSession): void;
-		public pushStencil(graphics: Graphics, webGLData: any[], renderSession: RenderSession): void;
+		public popStencil(graphics: Phaser.Graphics, webGLData: any[], renderSession: RenderSession): void;
+		public pushStencil(graphics: Phaser.Graphics, webGLData: any[], renderSession: RenderSession): void;
 
 		/**
 		 * Sets the drawing context to the one given in parameter.
@@ -2807,16 +2204,16 @@ declare namespace PIXI {
 		 *
 		 *
 		 * @param sprite the sprite to render when using this spritebatch
-		 * @param matrix - Optional matrix. If provided the Display Object will be rendered using this matrix, otherwise it will use its worldTransform.
+		 * @param matrix Optional matrix. If provided the Display Object will be rendered using this matrix, otherwise it will use its worldTransform.
 		 */
 		public render(sprite: Sprite): void;
 
 		/**
 		 *
 		 *
-		 * @param texture -
-		 * @param size -
-		 * @param startIndex -
+		 * @param texture
+		 * @param size
+		 * @param startIndex
 		 */
 		public renderBatch(texture: Texture, size: number, startIndex: number): void;
 
@@ -2836,558 +2233,6 @@ declare namespace PIXI {
 		public setContext(gl: WebGLRenderingContext): void;
 		public start(): void;
 		public stop(): void;
-
-	}
-
-	/**
-	 * A RenderTexture is a special texture that allows any Pixi display object to be rendered to it.
-	 *
-	 * __Hint__: All DisplayObjects (i.e. Sprites) that render to a RenderTexture should be preloaded otherwise black rectangles will be drawn instead.
-	 *
-	 * A RenderTexture takes a snapshot of any Display Object given to its render method. The position and rotation of the given Display Objects is ignored. For example:
-	 *
-	 *    const renderTexture = new PIXI.RenderTexture(800, 600);
-	 *    const sprite = PIXI.Sprite.fromImage("spinObj_01.png");
-	 *    sprite.position.x = 800/2;
-	 *    sprite.position.y = 600/2;
-	 *    sprite.anchor.x = 0.5;
-	 *    sprite.anchor.y = 0.5;
-	 *    renderTexture.render(sprite);
-	 *
-	 * The Sprite in this case will be rendered to a position of 0,0. To render this sprite at its actual position a DisplayObjectContainer should be used:
-	 *
-	 *    const doc = new PIXI.DisplayObjectContainer();
-	 *    doc.addChild(sprite);
-	 *    renderTexture.render(doc);  // Renders to center of renderTexture
-	 */
-	export class RenderTexture extends Texture {
-
-		/**
-		 * A RenderTexture is a special texture that allows any Pixi display object to be rendered to it.
-		 *
-		 * __Hint__: All DisplayObjects (i.e. Sprites) that render to a RenderTexture should be preloaded otherwise black rectangles will be drawn instead.
-		 *
-		 * A RenderTexture takes a snapshot of any Display Object given to its render method. The position and rotation of the given Display Objects is ignored. For example:
-		 *
-		 *    const renderTexture = new PIXI.RenderTexture(800, 600);
-		 *    const sprite = PIXI.Sprite.fromImage("spinObj_01.png");
-		 *    sprite.position.x = 800/2;
-		 *    sprite.position.y = 600/2;
-		 *    sprite.anchor.x = 0.5;
-		 *    sprite.anchor.y = 0.5;
-		 *    renderTexture.render(sprite);
-		 *
-		 * The Sprite in this case will be rendered to a position of 0,0. To render this sprite at its actual position a DisplayObjectContainer should be used:
-		 *
-		 *    const doc = new PIXI.DisplayObjectContainer();
-		 *    doc.addChild(sprite);
-		 *    renderTexture.render(doc);  // Renders to center of renderTexture
-		 *
-		 * @param width The width of the render texture
-		 * @param height The height of the render texture
-		 * @param renderer The renderer used for this RenderTexture
-		 * @param scaleMode See {{#crossLink "PIXI/scaleModes:property"}}PIXI.scaleModes{{/crossLink}} for possible values
-		 * @param resolution The resolution of the texture being generated
-		 */
-		public constructor(width?: number, height?: number, renderer?: PixiRenderer, scaleMode?: scaleModes, resolution?: number);
-
-		/**
-		 * The framing rectangle of the render texture
-		 */
-		public frame: Rectangle;
-
-		/**
-		 * The base texture object that this texture uses
-		 */
-		public baseTexture: BaseTexture;
-
-		/**
-		 * The renderer this RenderTexture uses. A RenderTexture can only belong to one renderer at the moment if its webGL.
-		 */
-		public renderer: PixiRenderer;
-
-		/**
-		 * The Resolution of the texture.
-		 */
-		public resolution: number;
-		public valid: boolean;
-
-		/**
-		 * Clears the RenderTexture.
-		 */
-		public clear(): void;
-
-		/**
-		 * Will return a base64 encoded string of this texture. It works by calling RenderTexture.getCanvas and then running toDataURL on that.
-		 * @return A base64 encoded string of the texture.
-		 */
-		public getBase64(): string;
-
-		/**
-		 * Creates a Canvas element, renders this RenderTexture to it and then returns it.
-		 * @return A Canvas element with the texture rendered on.
-		 */
-		public getCanvas(): HTMLCanvasElement;
-
-		/**
-		 * Will return a HTML Image of the texture
-		 */
-		public getImage(): HTMLImageElement;
-
-		/**
-		 * Resizes the RenderTexture.
-		 *
-		 * @param width The width to resize to.
-		 * @param height The height to resize to.
-		 * @param updateBase Should the baseTexture.width and height values be resized as well?
-		 */
-		public resize(width: number, height: number, updateBase: boolean): void;
-		public render(displayObject: DisplayObject, matrix?: Matrix, clear?: boolean): void;
-
-	}
-
-	// SPINE
-
-	export class BoneData {
-
-		public constructor(name: string, parent?: any);
-
-		public name: string;
-		public parent: any;
-		public length: number;
-		public x: number;
-		public y: number;
-		public rotation: number;
-		public scaleX: number;
-		public scaleY: number;
-
-	}
-
-	export class SlotData {
-
-		public constructor(name: string, boneData: BoneData);
-
-		public name: string;
-		public boneData: BoneData;
-		public r: number;
-		public g: number;
-		public b: number;
-		public a: number;
-		public attachmentName: string;
-
-	}
-
-	export class Bone {
-
-		public constructor(boneData: BoneData, parent?: any);
-
-		public data: BoneData;
-		public parent: any;
-		public yDown: boolean;
-		public x: number;
-		public y: number;
-		public rotation: number;
-		public scaleX: number;
-		public scaleY: number;
-		public worldRotation: number;
-		public worldScaleX: number;
-		public worldScaleY: number;
-
-		public updateWorldTransform(flipX: boolean, flip: boolean): void;
-		public setToSetupPose(): void;
-
-	}
-
-	export class Slot {
-
-		public constructor(slotData: SlotData, skeleton: Skeleton, bone: Bone);
-
-		public data: SlotData;
-		public skeleton: Skeleton;
-		public bone: Bone;
-		public r: number;
-		public g: number;
-		public b: number;
-		public a: number;
-		public attachment: RegionAttachment;
-		public setAttachment(attachment: RegionAttachment): void;
-		public setAttachmentTime(time: number): void;
-		public getAttachmentTime(): number;
-		public setToSetupPose(): void;
-
-	}
-
-	export class Skin {
-
-		public constructor(name: string);
-
-		public name: string;
-		public attachments: any;
-
-		public addAttachment(slotIndex: number, name: string, attachment: RegionAttachment): void;
-		public getAttachment(slotIndex: number, name: string): void;
-
-	}
-
-	export class Animation {
-
-		public constructor(name: string, timelines: ISpineTimeline[], duration: number);
-
-		public name: string;
-		public timelines: ISpineTimeline[];
-		public duration: number;
-		public apply(skeleton: Skeleton, time: number, loop: boolean): void;
-		public min(skeleton: Skeleton, time: number, loop: boolean, alpha: number): void;
-
-	}
-
-	export class Curves {
-
-		public constructor(frameCount: number);
-
-		public curves: number[];
-
-		public setLinear(frameIndex: number): void;
-		public setStepped(frameIndex: number): void;
-		public setCurve(frameIndex: number, cx1: number, cy1: number, cx2: number, cy2: number): void;
-		public getCurvePercent(frameIndex: number, percent: number): number;
-
-	}
-
-	export interface ISpineTimeline {
-
-		curves: Curves;
-		frames: number[];
-
-		getFrameCount(): number;
-		apply(skeleton: Skeleton, time: number, alpha: number): void;
-
-	}
-
-	export class RotateTimeline implements ISpineTimeline {
-
-		public constructor(frameCount: number);
-
-		public curves: Curves;
-		public frames: number[];
-		public boneIndex: number;
-
-		public getFrameCount(): number;
-		public setFrame(frameIndex: number, time: number, angle: number): void;
-		public apply(skeleton: Skeleton, time: number, alpha: number): void;
-
-	}
-
-	export class TranslateTimeline implements ISpineTimeline {
-
-		public constructor(frameCount: number);
-
-		public curves: Curves;
-		public frames: number[];
-		public boneIndex: number;
-
-		public getFrameCount(): number;
-		public setFrame(frameIndex: number, time: number, x: number, y: number): void;
-		public apply(skeleton: Skeleton, time: number, alpha: number): void;
-
-	}
-
-	export class ScaleTimeline implements ISpineTimeline {
-
-		public constructor(frameCount: number);
-
-		public curves: Curves;
-		public frames: number[];
-		public boneIndex: number;
-
-		public getFrameCount(): number;
-		public setFrame(frameIndex: number, time: number, x: number, y: number): void;
-		public apply(skeleton: Skeleton, time: number, alpha: number): void;
-
-	}
-
-	export class ColorTimeline implements ISpineTimeline {
-
-		public constructor(frameCount: number);
-
-		public curves: Curves;
-		public frames: number[];
-		public boneIndex: number;
-
-		public getFrameCount(): number;
-		public setFrame(frameIndex: number, time: number, r: number, g: number, b: number, a: number): void;
-		public apply(skeleton: Skeleton, time: number, alpha: number): void;
-
-	}
-
-	export class AttachmentTimeline implements ISpineTimeline {
-
-		public constructor(frameCount: number);
-
-		public curves: Curves;
-		public frames: number[];
-		public attachmentNames: string[];
-		public slotIndex: number;
-
-		public getFrameCount(): number;
-		public setFrame(frameIndex: number, time: number, attachmentName: string): void;
-		public apply(skeleton: Skeleton, time: number, alpha: number): void;
-
-	}
-
-	export class SkeletonData {
-
-		public bones: Bone[];
-		public slots: Slot[];
-		public skins: Skin[];
-		public animations: Animation[];
-		public defaultSkin: Skin;
-
-		public findBone(boneName: string): Bone;
-		public findBoneIndex(boneName: string): number;
-		public findSlot(slotName: string): Slot;
-		public findSlotIndex(slotName: string): number;
-		public findSkin(skinName: string): Skin;
-		public findAnimation(animationName: string): Animation;
-
-	}
-
-	export class Skeleton {
-
-		public constructor(skeletonData: SkeletonData);
-
-		public data: SkeletonData;
-		public bones: Bone[];
-		public slots: Slot[];
-		public drawOrder: any[];
-		public x: number;
-		public y: number;
-		public skin: Skin;
-		public r: number;
-		public g: number;
-		public b: number;
-		public a: number;
-		public time: number;
-		public flipX: boolean;
-		public flipY: boolean;
-
-		public updateWorldTransform(): void;
-		public setToSetupPose(): void;
-		public setBonesToSetupPose(): void;
-		public setSlotsToSetupPose(): void;
-		public getRootBone(): Bone;
-		public findBone(boneName: string): Bone;
-		public fineBoneIndex(boneName: string): number;
-		public findSlot(slotName: string): Slot;
-		public findSlotIndex(slotName: string): number;
-		public setSkinByName(skinName: string): void;
-		public setSkin(newSkin: Skin): void;
-		public getAttachmentBySlotName(slotName: string, attachmentName: string): RegionAttachment;
-		public getAttachmentBySlotIndex(slotIndex: number, attachmentName: string): RegionAttachment;
-		public setAttachment(slotName: string, attachmentName: string): void;
-		public update(data: number): void;
-
-	}
-
-	export class RegionAttachment {
-
-		public offset: number[];
-		public uvs: number[];
-		public x: number;
-		public y: number;
-		public rotation: number;
-		public scaleX: number;
-		public scaleY: number;
-		public width: number;
-		public height: number;
-		public rendererObject: any;
-		public regionOffsetX: number;
-		public regionOffsetY: number;
-		public regionWidth: number;
-		public regionHeight: number;
-		public regionOriginalWidth: number;
-		public regionOriginalHeight: number;
-
-		public setUVs(u: number, v: number, u2: number, v2: number, rotate: number): void;
-		public updateOffset(): void;
-		public computeVertices(x: number, y: number, bone: Bone, vertices: number[]): void;
-
-	}
-
-	export class AnimationStateData {
-
-		public constructor(skeletonData: SkeletonData);
-
-		public skeletonData: SkeletonData;
-		public animationToMixTime: any;
-		public defaultMix: number;
-
-		public setMixByName(fromName: string, toName: string, duration: number): void;
-		public setMix(from: string, to: string): number;
-
-	}
-
-	export class AnimationState {
-
-		public constructor(stateData: any);
-
-		public animationSpeed: number;
-		public current: any;
-		public previous: any;
-		public currentTime: number;
-		public previousTime: number;
-		public currentLoop: boolean;
-		public previousLoop: boolean;
-		public mixTime: number;
-		public mixDuration: number;
-		public queue: Animation[];
-
-		public update(delta: number): void;
-		public apply(skeleton: any): void;
-		public clearAnimation(): void;
-		public setAnimation(animation: any, loop: boolean): void;
-		public setAnimationByName(animationName: string, loop: boolean): void;
-		public addAnimationByName(animationName: string, loop: boolean, delay: number): void;
-		public addAnimation(animation: any, loop: boolean, delay: number): void;
-		public isComplete(): number;
-
-	}
-
-	export class SkeletonJson {
-
-		public constructor(attachmentLoader: AtlasAttachmentLoader);
-
-		public attachmentLoader: AtlasAttachmentLoader;
-		public scale: number;
-
-		public readSkeletonData(root: any): SkeletonData;
-		public readAttachment(skin: Skin, name: string, map: any): RegionAttachment;
-		public readAnimation(name: string, map: any, skeletonData: SkeletonData): void;
-		public readCurve(timeline: ISpineTimeline, frameIndex: number, valueMap: any): void;
-		public toColor(hexString: string, colorIndex: number): number;
-
-	}
-
-	export class Atlas {
-
-		public static FORMAT: {
-
-			alpha: number;
-			intensity: number;
-			luminanceAlpha: number;
-			rgb565: number;
-			rgba4444: number;
-			rgb888: number;
-			rgba8888: number;
-
-		};
-
-		public static TextureFilter: {
-
-			nearest: number;
-			linear: number;
-			mipMap: number;
-			mipMapNearestNearest: number;
-			mipMapLinearNearest: number;
-			mipMapNearestLinear: number;
-			mipMapLinearLinear: number;
-
-		};
-
-		public static textureWrap: {
-
-			mirroredRepeat: number;
-			clampToEdge: number;
-			repeat: number;
-
-		};
-
-		public constructor(atlasText: string, textureLoader: AtlasLoader);
-
-		public textureLoader: AtlasLoader;
-		public pages: AtlasPage[];
-		public regions: AtlasRegion[];
-
-		public findRegion(name: string): AtlasRegion;
-		public dispose(): void;
-		public updateUVs(page: AtlasPage): void;
-
-	}
-
-	export class AtlasPage {
-
-		public name: string;
-		public format: number;
-		public minFilter: number;
-		public magFilter: number;
-		public uWrap: number;
-		public vWrap: number;
-		public rendererObject: any;
-		public width: number;
-		public height: number;
-
-	}
-
-	export class AtlasRegion {
-
-		public page: AtlasPage;
-		public name: string;
-		public x: number;
-		public y: number;
-		public width: number;
-		public height: number;
-		public u: number;
-		public v: number;
-		public u2: number;
-		public v2: number;
-		public offsetX: number;
-		public offsetY: number;
-		public originalWidth: number;
-		public originalHeight: number;
-		public index: number;
-		public rotate: boolean;
-		public splits: any[];
-		public pads: any[];
-
-	}
-
-	export class AtlasReader {
-
-		public constructor(text: string);
-
-		public lines: string[];
-		public index: number;
-
-		public trim(value: string): string;
-		public readLine(): string;
-		public readValue(): string;
-		public readTuple(tuple: number): number;
-
-	}
-
-	export class AtlasAttachmentLoader {
-
-		public constructor(atlas: Atlas);
-
-		public atlas: Atlas;
-
-		public newAttachment(skin: Skin, type: number, name: string): RegionAttachment;
-
-	}
-
-	export class Spine extends DisplayObjectContainer {
-
-		public constructor(url: string);
-
-		public autoUpdate: boolean;
-		public spineData: any;
-		public skeleton: Skeleton;
-		public stateData: AnimationStateData;
-		public state: AnimationState;
-		public slotContainers: DisplayObjectContainer[];
-
-		public createSprite(slot: Slot, descriptor: { name: string }): Sprite[];
-		public update(dt: number): void;
 
 	}
 
