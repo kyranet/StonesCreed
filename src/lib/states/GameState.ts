@@ -10,6 +10,12 @@ export class GameState extends Phaser.State {
 	public create() {
 		super.create();
 		for (const task of GameState.gameManager.pendingOnCreate) task();
+		GameState.gameManager.pendingOnCreate.length = 0;
+	}
+
+	public update() {
+		super.update();
+		GameState.gameManager.update();
 	}
 
 	public static gameManager: GameManager = null;

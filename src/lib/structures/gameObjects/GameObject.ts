@@ -9,8 +9,9 @@ export class GameObject extends Phaser.Sprite {
 		this.game.add.existing(this);
 		this.game.physics.arcade.enable(this);
 		this.gameManager.gameObjects.add(this);
+		this.gameManager.gameObjectsGroup.add(this);
+		this.body.collideWorldBounds = true;
 		this.smoothed = false;
-		console.log(this);
 	}
 
 	public destroy(destroyChildren?: boolean) {
@@ -24,8 +25,8 @@ export class GameObject extends Phaser.Sprite {
 	 * @param y The new y position
 	 */
 	public setPosition(x: number, y: number) {
-		this.body.x = x;
-		this.body.y = y;
+		this.position.x = x;
+		this.position.y = y;
 		return this;
 	}
 
@@ -58,6 +59,13 @@ export class GameObject extends Phaser.Sprite {
 		throw new TypeError(`Expected gameObject to be a GameObject instance`);
 	}
 
+	public fromJSON(data: IGameObjectSerialized) {
+		this.name = data.name;
+		this.setPosition(data.position.x, data.position.y);
+		this.setVelocity(data.velocity.x, data.velocity.y);
+		return this;
+	}
+
 	public toJSON(): IGameObjectSerialized {
 		return {
 			frame: this.frame as string,
@@ -67,21 +75,12 @@ export class GameObject extends Phaser.Sprite {
 				x: this.position.x,
 				y: this.position.y
 			},
-			type: this.constructor.name,
+			type: 'GameObject',
 			velocity: {
 				x: this.body.velocity.x,
 				y: this.body.velocity.y
 			}
 		};
-	}
-
-	public fromJSON(data: IGameObjectSerialized) {
-		this.frame = data.frame;
-		this.key = data.key;
-		this.name = data.name;
-		return this
-		.setPosition(data.position.x, data.position.y)
-		.setVelocity(data.velocity.x, data.velocity.y);
 	}
 
 	public static factory = new GameObjectFactory();

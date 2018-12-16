@@ -6,6 +6,7 @@ export class MenuState extends GameState {
 	public logo: Phaser.Sprite = null;
 
 	public create() {
+		super.create();
 		this.game.stage.backgroundColor = '#2A1B19';
 		this.logo = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY - 120, 'logo');
 		this.logo.anchor.setTo(0.5, 0.5);

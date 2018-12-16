@@ -2,6 +2,7 @@ import { GameState } from './GameState';
 
 export class PlayState extends GameState {
 	public tilemaps: Map<number, Phaser.Tilemap> = new Map();
+	public obstacleLayer: Phaser.TilemapLayer = null;
 
 	public preload() {
 		super.preload();
@@ -13,9 +14,6 @@ export class PlayState extends GameState {
 
 	public create() {
 		this.getTilemap(0);
-
-		this.camera.scale.setTo(3, 3);
-		// this.game.add.tileSprite(0, 0, 16, 32, 'player');
 
 		// Prevent directions and space key events bubbling up to browser,
 		// since these keys will make web page scroll which is not
@@ -31,15 +29,14 @@ export class PlayState extends GameState {
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
 		this.game.stage.backgroundColor = '#99F';
 		super.create();
+		console.log(this);
 	}
 
 	public update() {
-		for (const gameObject of GameState.gameManager.gameObjects) {
-			gameObject.update();
-		}
+		this.game.physics.arcade.collide(GameState.gameManager.player, this.obstacleLayer);
 	}
 
-	private getTilemap(level: number) {
+	protected getTilemap(level: number) {
 		const name = `Level-${level}`;
 		let tilemap = this.tilemaps.get(level);
 		if (!tilemap) {
@@ -47,11 +44,17 @@ export class PlayState extends GameState {
 			tilemap.addTilesetImage('overworld');
 
 			// Background
-			tilemap.createLayer(0).smoothed = false;
+			const background = tilemap.createLayer(0);
+			background.smoothed = false;
+			background.resizeWorld();
 			// // Decoration
 			tilemap.createLayer(1).smoothed = false;
 			// // Obstacles
-			tilemap.createLayer(2).smoothed = false;
+			this.obstacleLayer = tilemap.createLayer(2);
+			this.obstacleLayer.smoothed = false;
+			this.game.physics.arcade.enable(this.obstacleLayer);
+			tilemap.setCollisionByExclusion([], true, this.obstacleLayer);
+			// GameState.gameManager.obstaclesGroup.add(obstacles);
 			// this.game.physics.arcade.enable(obstacles);
 			// tilemap.setCollisionByExclusion([], true, obstacles);
 

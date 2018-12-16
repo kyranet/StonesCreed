@@ -19,6 +19,7 @@ export class Player extends Character {
 		super(gameManager, x, y, 'player');
 		this.game.camera.follow(this);
 		this.cursorKeys = this.game.input.keyboard.createCursorKeys();
+		console.log(this);
 	}
 
 	public update() {
