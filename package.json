@@ -1,12 +1,11 @@
 {
   "name": "creedstones",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Browser videogame built with Phaser and TypeScript",
   "scripts": {
     "bundle": "npx webpack --config webpack.config.js",
     "lint": "tslint -p tsconfig.json src/lib/**/*.ts --fix",
     "server": "node scripts/server.js",
-    "start": "node dist/src/Skyra.js",
     "test": "tslint -p tsconfig.json src/lib/**/*.ts",
     "update": "yarn",
     "watch": "node scripts/watch.js",
@@ -35,7 +34,7 @@
   ],
   "contributors": [
     "kyraNET <kyradiscord@gmail.com>",
-    "CarlosMGM"
+    "CarlosMGM <gonzalem@ucm.es>"
   ],
   "author": "kyranet <kyradiscord@gmail.com>",
   "license": "MIT",
