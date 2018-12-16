@@ -32,7 +32,8 @@ export class PlayState extends GameState {
 	}
 
 	public update() {
-		this.game.physics.arcade.collide(GameState.gameManager.player, this.obstacleLayer);
+		super.update();
+		this.game.physics.arcade.collide(GameState.gameManager.gameObjectsGroup, this.obstacleLayer);
 	}
 
 	protected getTilemap(level: number) {
