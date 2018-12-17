@@ -48,7 +48,7 @@ export class PlayState extends GameState {
 	public shutdown() {
 		document.removeEventListener('keydown', this.escListener);
 		this.escListener = null;
-		return super.shutdown(this.game);
+		super.shutdown(this.game);
 	}
 
 	public update() {
