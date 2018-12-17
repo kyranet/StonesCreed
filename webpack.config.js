@@ -12,7 +12,7 @@ module.exports = {
 		extensions: ['.ts', '.tsx', '.js']
 	},
 	plugins: [
-		new CopyWebpackPlugin([{ from: 'static', context: __dirname }], { debug: true })
+		new CopyWebpackPlugin([{ from: 'static', context: __dirname }])
 	],
 	module: {
 		rules: [
