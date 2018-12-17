@@ -5,8 +5,8 @@ export class PlayState extends GameState {
 	public gameManager: GameManager = null;
 	public tilemaps: Map<number, Phaser.Tilemap> = new Map();
 	public obstacleLayer: Phaser.TilemapLayer = null;
+	protected events: Map<string, Function> = new Map();
 	private escListener: (event: KeyboardEvent) => void = null;
-	private pendingForTogglePause = false;
 
 	public create() {
 		this.getTilemap(0);
@@ -27,28 +27,36 @@ export class PlayState extends GameState {
 		this.game.stage.backgroundColor = '#000';
 		super.create();
 
+		const onPause = () => {
+			this.world.setAllChildren('tint', 0x7A7A7A);
+		};
+		const onResume = () => {
+			this.world.setAllChildren('tint', 0xFFFFFF);
+		};
+		this.events.set('onPause', onPause);
+		this.events.set('onResume', onResume);
+		this.game.onPause.add(onPause);
+		this.game.onResume.add(onResume);
+
 		this.escListener = (event: KeyboardEvent) => {
 			if (event.key === 'Escape') {
-				this.world.setAllChildren('tint', this.game.paused ? 0xFFFFFF : 0x7A7A7A);
-				if (this.game.paused) this.game.paused = false;
-				else this.pendingForTogglePause = true;
+				this.game.paused = !this.game.paused;
 			}
 		};
 		document.addEventListener('keydown', this.escListener);
 	}
 
 	public shutdown() {
+		// Clean up everything to avoid memory leaks
 		document.removeEventListener('keydown', this.escListener);
 		this.escListener = null;
+		this.game.onPause.remove(this.events.get('onPause'));
+		this.game.onResume.remove(this.events.get('onResume'));
+		this.events.clear();
 		super.shutdown(this.game);
 	}
 
 	public update() {
-		// Done this way to pause in the next "tick"
-		if (this.pendingForTogglePause) {
-			this.game.paused = true;
-			this.pendingForTogglePause = false;
-		}
 		super.update(this.game);
 
 		if (!this.game.paused) {
