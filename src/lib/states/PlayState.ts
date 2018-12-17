@@ -8,14 +8,6 @@ export class PlayState extends GameState {
 	private escListener: (event: KeyboardEvent) => void = null;
 	private pendingForTogglePause = false;
 
-	public preload() {
-		super.preload(this.game);
-		this.game.load.tilemap('Level-0', 'json/Level-0.json', null, Phaser.Tilemap.TILED_JSON);
-		this.game.load.image('overworld', 'images/overworld.png');
-		this.game.load.image('cave', 'images/cave.png');
-		this.game.load.image('objects', 'images/objects.png');
-	}
-
 	public create() {
 		this.getTilemap(0);
 
