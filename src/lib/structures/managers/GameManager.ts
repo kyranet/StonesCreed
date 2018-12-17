@@ -34,6 +34,7 @@ export class GameManager {
 			gameObject.update();
 		}
 		this.game.physics.arcade.collide(this.gameObjectsGroup, undefined, (g1: GameObject, g2: GameObject) => g1.collides(g2) && g2.collides(g1));
+		this.gameObjectsGroup.sort('y', Phaser.Group.SORT_ASCENDING);
 	}
 
 }
