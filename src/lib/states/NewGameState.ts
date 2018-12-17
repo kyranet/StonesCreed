@@ -26,7 +26,7 @@ export class NewGameState extends GameState {
 			GameState.pendingOnCreate.push((playState: PlayState) => {
 				console.log('Loading New Game...');
 				playState.gameManager.playerName = name;
-				playState.gameManager.storageManager.loadGameObjects(this.game.cache.getJSON('Level-0-GameObjects'));
+				playState.gameManager.storage.loadGameObjects(this.game.cache.getJSON('Level-0-GameObjects'));
 				console.log('Loaded!');
 			});
 		}, { maximumLength: 20 });

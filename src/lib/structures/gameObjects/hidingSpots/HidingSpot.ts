@@ -25,7 +25,8 @@ export class HidingSpot extends GameObject {
 	public toJSON(): IHidingSpotSerialized {
 		return {
 			...super.toJSON(),
-			hidingType: this.hidingType
+			hidingType: this.hidingType,
+			type: 'GameObject'
 		};
 	}
 

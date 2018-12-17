@@ -13,7 +13,7 @@ export class Character extends GameObject {
 
 	public constructor(gameManager: GameManager, x: number, y: number, key?: string, frame?: string) {
 		super(gameManager, x, y, key, frame);
-		this.body.setSize(this.width * 0.9, this.height * 0.4, 0, this.height * 0.5);
+		this.body.setSize(this.width * 0.9, this.height * 0.3, 0, this.height * 0.6);
 
 		this.animations.add('stand.down', [0]);
 		this.animations.add('move.down', [1, 2, 3, 4]);
@@ -125,6 +125,7 @@ export class Character extends GameObject {
 			direction: this.direction,
 			runSpeed: this.runSpeed,
 			strength: this.strength,
+			type: 'Character',
 			walkSpeed: this.walkSpeed,
 		};
 	}

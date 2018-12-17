@@ -17,7 +17,7 @@ export class MenuState extends GameState {
 		});
 		if (localStorage.getItem('level')) this.createButton('Continue', () => {
 			GameState.pendingOnCreate.push((playState: PlayState) => {
-				playState.gameManager.storageManager.load();
+				playState.gameManager.storage.load();
 			});
 			this.game.state.start('play');
 		});
@@ -42,8 +42,8 @@ export class MenuState extends GameState {
 		});
 		text.events.onInputOver.add(() => { text.fill = '#FFFFFF'; });
 		text.events.onInputOut.add(() => { text.fill = '#EFEFEF'; });
+		text.alignTo(this.texts.length ? this.texts[this.texts.length - 1] : this.logo, Phaser.BOTTOM_CENTER, 0, 16);
 		this.texts.push(text);
-		text.alignTo(this.texts.length ? this.texts[this.texts.length - 1] : this.logo, Phaser.BOTTOM_CENTER, 16);
 	}
 
 }

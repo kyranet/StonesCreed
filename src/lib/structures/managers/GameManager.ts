@@ -5,7 +5,7 @@ import { StorageManager } from './StorageManager';
 
 export class GameManager {
 	public mapManager: MapManager = null;
-	public storageManager = new StorageManager(this);
+	public storage = new StorageManager(this);
 	public gameObjectsGroup: Phaser.Group = null;
 	public player: Player = null;
 	public playerName: string = null;

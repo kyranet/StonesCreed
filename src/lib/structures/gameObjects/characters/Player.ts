@@ -56,6 +56,8 @@ export class Player extends Character {
 			this.actions.interact = true;
 			this.actions.kill = false;
 			this.triggerWalk();
+		} else if (keyboard.isDown(Phaser.Keyboard.S)) {
+			this.gameManager.storage.save();
 		} else {
 			this.actions.interact = false;
 			this.actions.kill = false;
@@ -107,7 +109,8 @@ export class Player extends Character {
 	public toJSON(): IPlayerSerialized {
 		return {
 			...super.toJSON(),
-			hidingSpot: this.hidingSpot.toJSON()
+			hidingSpot: this.hidingSpot ? this.hidingSpot.toJSON() : null,
+			type: 'Player'
 		};
 	}
 

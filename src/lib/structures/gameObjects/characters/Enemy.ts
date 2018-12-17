@@ -106,7 +106,8 @@ export class Enemy extends Character {
 			...super.toJSON(),
 			isTarget: this.isTarget,
 			pov: this.pov,
-			route: this.route.toJSON()
+			route: this.route.toJSON(),
+			type: 'Enemy'
 		};
 	}
 
