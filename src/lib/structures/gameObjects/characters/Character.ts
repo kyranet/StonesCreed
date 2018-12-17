@@ -53,15 +53,20 @@ export class Character extends GameObject {
 		this.attackRefresh = Date.now() + this.attackCooldown;
 		character.damage(this.strength);
 		this.animations.play(`kill.${Direction[this.direction]}`, (1000 / this.attackCooldown) * 3);
+		return this;
 	}
 
 	/**
 	 * Kill overload to set the character's state
 	 */
 	public kill() {
-		this.setState(CharacterState.dead);
+		this.setVelocity(0, 0);
+		this.setState(CharacterState.dying);
 		this.animations.play(`dead.${Direction[this.direction]}`, 1.5);
-		this.game.time.events.add(Phaser.Timer.SECOND * 3, () => super.kill());
+		this.game.time.events.add(Phaser.Timer.SECOND * 3, () => {
+			this.setState(CharacterState.dead);
+			super.kill();
+		});
 		return this;
 	}
 
@@ -72,6 +77,7 @@ export class Character extends GameObject {
 		this.setState(CharacterState.walk);
 		this.animations.play(`move.${Direction[this.direction]}`, 5);
 		this.updateVelocity(this.walkSpeed);
+		return this;
 	}
 
 	/**
@@ -81,6 +87,7 @@ export class Character extends GameObject {
 		this.setState(CharacterState.run);
 		this.animations.play(`move.${Direction[this.direction]}`, 8);
 		this.updateVelocity(this.runSpeed);
+		return this;
 	}
 
 	/**
@@ -91,6 +98,7 @@ export class Character extends GameObject {
 		this.animations.play(`stand.${Direction[this.direction]}`, 0);
 		this.animations.stop();
 		this.setVelocity(0, 0);
+		return this;
 	}
 
 	/**
@@ -99,6 +107,7 @@ export class Character extends GameObject {
 	 */
 	public changeDirection(direction: Direction) {
 		this.direction = direction;
+		return this;
 	}
 
 	public fromJSON(data: ICharacterSerialized) {

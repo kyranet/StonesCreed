@@ -64,7 +64,9 @@ export class Player extends Character {
 
 	public attack(character: Character) {
 		super.attack(character);
+		character.kill();
 		this.movementRefresh = this.attackRefresh;
+		return this;
 	}
 
 	public collides(gameObject: Character) {

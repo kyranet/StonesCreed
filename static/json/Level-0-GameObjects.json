@@ -19,8 +19,8 @@
 	{
 		"name": "enemy",
 		"position": {
-			"x": 75,
-			"y": 200
+			"x": 336,
+			"y": 48
 		},
 		"type": "Enemy",
 		"velocity": {
@@ -33,6 +33,10 @@
 		"walkSpeed": 95,
 		"isTarget": false,
 		"pov": 2.6703,
-		"route": []
+		"route": [
+			[336, 48],
+			[816, 48],
+			[816, 240]
+		]
 	}
 ]

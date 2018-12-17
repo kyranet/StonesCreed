@@ -28,20 +28,21 @@ export enum HidingType {
 
 export const CharacterState: ICharacterState = {
 	dead: 0,
-	run: 1,
-	stand: 2,
-	walk: 3
+	dying: 1,
+	run: 2,
+	stand: 3,
+	walk: 4,
 };
 
 export const PlayerState: IPlayerState = {
 	...CharacterState,
-	hidden: 4
+	hidden: 5
 };
 
 export const EnemyState: IEnemyState = {
 	...CharacterState,
-	onRoute: 4,
-	pursuit: 5
+	onRoute: 6,
+	pursuit: 7
 };
 
 /**
@@ -49,22 +50,23 @@ export const EnemyState: IEnemyState = {
  */
 interface ICharacterState {
 	dead: 0;
-	run: 1;
-	stand: 2;
-	walk: 3;
+	dying: 1;
+	run: 2;
+	stand: 3;
+	walk: 4;
 }
 
 /**
  * The player states
  */
 interface IPlayerState extends ICharacterState {
-	hidden: 4;
+	hidden: 5;
 }
 
 /**
  * The enemy states
  */
 interface IEnemyState extends ICharacterState {
-	onRoute: 4;
-	pursuit: 5;
+	onRoute: 6;
+	pursuit: 7;
 }

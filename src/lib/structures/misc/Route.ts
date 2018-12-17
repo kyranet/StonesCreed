@@ -6,6 +6,14 @@ export interface ArrayRoute extends Array<[number, number]> { }
 export class Route {
 	private route: ArrayRoute = [];
 
+	public get size() {
+		return this.route.length;
+	}
+
+	public get(position: number) {
+		return position < this.route.length ? this.route[position] : null;
+	}
+
 	/**
 	 * Set a new route for this instance
 	 * @param route The new route
