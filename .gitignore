@@ -4,7 +4,6 @@ node_modules/
 
 # Ignore bwd folders
 build/
-dist/
 
 # Ignore the config file (contains sensitive information such as tokens)
 config.ts
