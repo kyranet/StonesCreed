@@ -5,6 +5,8 @@ export class PlayState extends GameState {
 	public gameManager: GameManager = null;
 	public tilemaps: Map<number, Phaser.Tilemap> = new Map();
 	public obstacleLayer: Phaser.TilemapLayer = null;
+	private escListener: (event: KeyboardEvent) => void = null;
+	private pendingForTogglePause = false;
 
 	public preload() {
 		super.preload(this.game);
@@ -30,14 +32,37 @@ export class PlayState extends GameState {
 
 		this.gameManager = new GameManager(this.game);
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
-		this.game.stage.backgroundColor = '#99F';
+		this.game.stage.backgroundColor = '#000';
 		super.create();
+
+		this.escListener = (event: KeyboardEvent) => {
+			if (event.key === 'Escape') {
+				this.world.setAllChildren('tint', this.game.paused ? 0xFFFFFF : 0x7A7A7A);
+				if (this.game.paused) this.game.paused = false;
+				else this.pendingForTogglePause = true;
+			}
+		};
+		document.addEventListener('keydown', this.escListener);
+	}
+
+	public shutdown() {
+		document.removeEventListener('keydown', this.escListener);
+		this.escListener = null;
+		return super.shutdown(this.game);
 	}
 
 	public update() {
+		// Done this way to pause in the next "tick"
+		if (this.pendingForTogglePause) {
+			this.game.paused = true;
+			this.pendingForTogglePause = false;
+		}
 		super.update(this.game);
-		this.game.physics.arcade.collide(this.gameManager.gameObjectsGroup, this.obstacleLayer);
-		this.gameManager.update();
+
+		if (!this.game.paused) {
+			this.game.physics.arcade.collide(this.gameManager.gameObjectsGroup, this.obstacleLayer);
+			this.gameManager.update();
+		}
 	}
 
 	protected getTilemap(level: number) {
