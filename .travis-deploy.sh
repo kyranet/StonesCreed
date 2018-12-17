@@ -17,7 +17,7 @@ SHA=$(git rev-parse --verify HEAD)
 TARGET_BRANCH="gh-pages"
 git clone $REPO out -b $TARGET_BRANCH
 
-yarn run bundle:publish
+yarn run bundle
 
 rsync -vau dist/ out/
 

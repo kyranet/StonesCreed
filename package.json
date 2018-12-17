@@ -4,7 +4,6 @@
   "description": "Browser videogame built with Phaser and TypeScript",
   "scripts": {
     "bundle": "npx webpack --config webpack.config.js",
-    "bundle:publish": "npx webpack --config webpack.config.js -o 'out/js/bundle.min.js'",
     "lint": "tslint -p tsconfig.json src/lib/**/*.ts --fix",
     "server": "node scripts/server.js",
     "test": "tslint -p tsconfig.json src/lib/**/*.ts",
@@ -18,6 +17,7 @@
   },
   "devDependencies": {
     "@types/node": "^10.12.15",
+    "copy-webpack-plugin": "^4.6.0",
     "ts-loader": "^5.3.1",
     "tslint": "^5.11.0",
     "typescript": "^3.2.2",
