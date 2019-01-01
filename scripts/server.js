@@ -22,7 +22,7 @@ createServer((request, response) => {
 	} catch {
 		write(response, 500);
 	}
-}).listen(3000, () => console.log(`Listening on https://localhost:3000`));
+}).listen(3000, () => console.log(`Listening on http://localhost:3000`));
 
 function write(response, code) {
 	response.writeHead(code);
