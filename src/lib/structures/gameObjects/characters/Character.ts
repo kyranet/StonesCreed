@@ -110,6 +110,12 @@ export class Character extends GameObject {
 		return this;
 	}
 
+	public relativeAngleTo(gameObject: GameObject) {
+		const absoluteAngle = this.absoluteAngleTo(gameObject);
+		const relativeAngle = this.relativeAngle;
+		return absoluteAngle - relativeAngle;
+	}
+
 	public fromJSON(data: ICharacterSerialized) {
 		super.fromJSON(data);
 		this.direction = data.direction;
@@ -140,6 +146,15 @@ export class Character extends GameObject {
 			case Direction.up: this.setVelocity(0, -speed); break;
 			case Direction.left: this.setVelocity(-speed, 0); break;
 			default: this.setVelocity(speed, 0);
+		}
+	}
+
+	protected get relativeAngle() {
+		switch (this.direction) {
+			case Direction.down: return Phaser.Math.HALF_PI;
+			case Direction.left: return Math.PI;
+			case Direction.right: return 0;
+			case Direction.up: return -Phaser.Math.HALF_PI;
 		}
 	}
 

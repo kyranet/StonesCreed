@@ -6,7 +6,7 @@ import { Character, ICharacterSerialized } from './Character';
 export class Enemy extends Character {
 	public route = new Route();
 	protected routeAt = 1;
-	protected pov = Math.PI * 0.85;
+	protected pov = 80 * (Math.PI / 180);
 	protected isTarget = false;
 	protected onRoute = true;
 	protected reverse = false;
@@ -23,6 +23,21 @@ export class Enemy extends Character {
 	public update() {
 		super.update();
 
+		// TODO: Move all this logic on a detectPlayer method
+		// The player is near the enemy
+		if (this.distanceInTiles(this.gameManager.player) <= 5) {
+			const direction = this.relativeAngleTo(this.gameManager.player);
+			const sees = Math.abs(direction) < this.pov / 2;
+			// TODO: Add collision/obstacle detection
+			// TODO: Add player hidden detection
+			// TODO: Add onDetection method
+			if (sees) {
+				console.log(`I am near, and I'm seeing you at ${Math.floor(direction * 180 / Math.PI)} degrees from me.`);
+			} else {
+				console.log(`I am near, but I don't see you. You're at ${Math.floor(direction * 180 / Math.PI)} degrees from me.`);
+			}
+			// this.gameManager.state.obstacleLayer.layer.data;
+		}
 		if (this.onRoute && this.route.size > 1) {
 			const [x, y] = this.route.get(this.routeAt);
 			if (!this.moveTowards(x, y)) {

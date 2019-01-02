@@ -1,3 +1,4 @@
+import { PlayState } from '../../states/PlayState';
 import { Player } from '../gameObjects/characters/Player';
 import { GameObject } from '../gameObjects/GameObject';
 import { MapManager } from './MapManager';
@@ -5,6 +6,7 @@ import { StorageManager } from './StorageManager';
 
 export class GameManager {
 	public mapManager: MapManager = null;
+	public game = this.state.game;
 	public storage = new StorageManager(this);
 	public gameObjectsGroup: Phaser.Group = null;
 	public player: Player = null;
@@ -12,7 +14,7 @@ export class GameManager {
 	public level = GameLevels.First;
 	public pendingOnCreate: Function[] = [];
 
-	public constructor(public game: Phaser.Game) {
+	public constructor(public state: PlayState) {
 		// this.gameObjectsGroup = game.add.group(null, 'gameObjects', undefined, true, Phaser.Physics.ARCADE);
 		// this.obstaclesGroup = game.add.group(null, 'obstacles', undefined, true, Phaser.Physics.ARCADE);
 		// this.gameObjectsGroup = game.add.group(null, 'gameObjectsGroup', true, false, Phaser.Physics.ARCADE);

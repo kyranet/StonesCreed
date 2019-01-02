@@ -86,10 +86,23 @@ export class GameObject extends Phaser.Sprite {
 		};
 	}
 
+	public distance(gameObject: GameObject) {
+		return this.position.distance(gameObject.position);
+	}
+
+	public distanceInTiles(gameObject: GameObject) {
+		return this.distance(gameObject) / TILE_SIZE;
+	}
+
+	public absoluteAngleTo(gameObject: GameObject) {
+		return Math.atan2(gameObject.position.y - this.position.y, gameObject.position.x - this.position.x);
+	}
+
 	public static factory = new GameObjectFactory();
 
 }
 
+import { TILE_SIZE } from '../../util/constants';
 import { Character } from './characters/Character';
 import { Enemy } from './characters/Enemy';
 import { Player } from './characters/Player';

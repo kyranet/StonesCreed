@@ -22,7 +22,7 @@ export class PlayState extends GameState {
 			Phaser.Keyboard.SPACEBAR
 		]);
 
-		this.gameManager = new GameManager(this.game);
+		this.gameManager = new GameManager(this);
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
 		this.game.stage.backgroundColor = '#000';
 		super.create();

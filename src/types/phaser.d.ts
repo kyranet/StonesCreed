@@ -30610,7 +30610,7 @@ declare namespace Phaser {
 		 * without polluting the Game Object directly.
 		 * Default: {}
 		 */
-		public data: any;
+		public data: Phaser.Tile[][];
 
 		/**
 		 * Enable an additional "debug rendering" pass to display collision information.
