@@ -23,21 +23,7 @@ export class Enemy extends Character {
 	public update() {
 		super.update();
 
-		// TODO: Move all this logic on a detectPlayer method
-		// The player is near the enemy
-		if (this.distanceInTiles(this.gameManager.player) <= 5) {
-			const direction = this.relativeAngleTo(this.gameManager.player);
-			const sees = Math.abs(direction) < this.pov / 2;
-			// TODO: Add collision/obstacle detection
-			// TODO: Add player hidden detection
-			// TODO: Add onDetection method
-			if (sees) {
-				console.log(`I am near, and I'm seeing you at ${Math.floor(direction * 180 / Math.PI)} degrees from me.`);
-			} else {
-				console.log(`I am near, but I don't see you. You're at ${Math.floor(direction * 180 / Math.PI)} degrees from me.`);
-			}
-			// this.gameManager.state.obstacleLayer.layer.data;
-		}
+		this.detectPlayer();
 		if (this.onRoute && this.route.size > 1) {
 			const [x, y] = this.route.get(this.routeAt);
 			if (!this.moveTowards(x, y)) {
@@ -124,6 +110,23 @@ export class Enemy extends Character {
 			route: this.route.toJSON(),
 			type: 'Enemy'
 		};
+	}
+
+	private detectPlayer() {
+		if (this.distanceInTilesTo(this.gameManager.player) > 5) return false;
+
+		// The player is near the enemy
+		const direction = this.relativeAngleTo(this.gameManager.player);
+		const inPOV = Math.abs(direction) < this.pov / 2;
+		if (!inPOV) return false;
+
+		// TODO: Add collision/obstacle detection
+		// TODO: Add player hidden detection
+		// TODO: Add onDetection method
+		console.log(`I am near, and I'm seeing you at ${Math.floor(direction * 180 / Math.PI)} degrees from me.`);
+		// this.gameManager.state.obstacleLayer.layer.data;
+
+		return false;
 	}
 
 }

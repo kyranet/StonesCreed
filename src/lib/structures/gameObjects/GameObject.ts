@@ -5,7 +5,7 @@ export class GameObject extends Phaser.Sprite {
 
 	public body: Phaser.Physics.Arcade.Body;
 
-	public constructor(public gameManager: GameManager, x: number, y: number, key?: string, frame?: string) {
+	public constructor(public gameManager: GameManager, x: number, y: number, key?: string, frame?: string | number) {
 		super(gameManager.game, x, y, key, frame);
 		// Add the gameobject itself to the game
 		this.game.add.existing(this);
@@ -71,7 +71,7 @@ export class GameObject extends Phaser.Sprite {
 
 	public toJSON(): IGameObjectSerialized {
 		return {
-			frame: this.frame as string,
+			frame: this.frame,
 			key: this.key as string,
 			name: this.name,
 			position: {
@@ -86,15 +86,19 @@ export class GameObject extends Phaser.Sprite {
 		};
 	}
 
-	public distance(gameObject: GameObject) {
+	public positionInTiles() {
+		return new Phaser.Point(this.position.x / TILE_SIZE, this.position.y / TILE_SIZE);
+	}
+
+	public distanceTo(gameObject: GameObject) {
 		return this.position.distance(gameObject.position);
 	}
 
-	public distanceInTiles(gameObject: GameObject) {
-		return this.distance(gameObject) / TILE_SIZE;
+	public distanceInTilesTo(gameObject: GameObject) {
+		return this.distanceTo(gameObject) / TILE_SIZE;
 	}
 
-	public absoluteAngleTo(gameObject: GameObject) {
+	public angleTo(gameObject: GameObject) {
 		return Math.atan2(gameObject.position.y - this.position.y, gameObject.position.x - this.position.x);
 	}
 
@@ -122,7 +126,7 @@ GameObject.factory.set('Trap', Trap);
  * The serialized game object data
  */
 export interface IGameObjectSerialized {
-	frame: string;
+	frame: string | number;
 	key: string;
 	name: string;
 	position: {

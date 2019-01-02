@@ -111,7 +111,7 @@ export class Character extends GameObject {
 	}
 
 	public relativeAngleTo(gameObject: GameObject) {
-		const absoluteAngle = this.absoluteAngleTo(gameObject);
+		const absoluteAngle = this.angleTo(gameObject);
 		const relativeAngle = this.relativeAngle;
 		return absoluteAngle - relativeAngle;
 	}
