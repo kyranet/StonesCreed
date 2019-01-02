@@ -113,20 +113,34 @@ export class Enemy extends Character {
 	}
 
 	private detectPlayer() {
-		if (this.distanceInTilesTo(this.gameManager.player) > 5) return false;
+		const { player } = this.gameManager;
 
-		// The player is near the enemy
-		const direction = this.relativeAngleTo(this.gameManager.player);
+		// If there is no player or it is hidden, return false
+		if (!player || player.hidingSpot) return false;
+
+		// If the player is out of the 5-tile range, return false
+		if (this.distanceInTilesTo(player) > 5) return false;
+
+		// Get the relative angle from this enemy to the player
+		// If the player is not inside the POV radius, return false
+		const direction = this.relativeAngleTo(player);
 		const inPOV = Math.abs(direction) < this.pov / 2;
 		if (!inPOV) return false;
 
 		// TODO: Add collision/obstacle detection
-		// TODO: Add player hidden detection
-		// TODO: Add onDetection method
-		console.log(`I am near, and I'm seeing you at ${Math.floor(direction * 180 / Math.PI)} degrees from me.`);
 		// this.gameManager.state.obstacleLayer.layer.data;
 
-		return false;
+		// TODO: Remove console.log once all changes are done
+		console.log(`I am near, and I'm seeing you at ${Math.floor(direction * 180 / Math.PI)} degrees from me.`);
+
+		// Call onDetection
+		this.onDetection();
+
+		return true;
+	}
+
+	private onDetection() {
+		// TODO: Implement this method
 	}
 
 }
