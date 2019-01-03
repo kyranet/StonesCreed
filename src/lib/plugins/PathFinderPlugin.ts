@@ -1,11 +1,11 @@
 // Copyright (c) 2013 appsbu-de. MIT license.
 // https://github.com/appsbu-de/phaser_plugin_pathfinding
 
-Phaser.Plugin.PathFinderPlugin = class PathFinderPlugin extends Phaser.Plugin {
+export class PathFinderPlugin extends Phaser.Plugin {
 
 	private _easyStar = new EasyStar.js();
 	private _grid: number[][] = null;
-	private _callback: Phaser.Plugin.EasyStarCallback = null;
+	private _callback: Phaser.EasyStarCallback = null;
 	private _prepared = false;
 	private _walkables = [0];
 
@@ -60,7 +60,7 @@ Phaser.Plugin.PathFinderPlugin = class PathFinderPlugin extends Phaser.Plugin {
 	 * Set callback function (Uh, really?)
 	 * @param callback The callback to set
 	 */
-	public setCallbackFunction(callback: Phaser.Plugin.EasyStarCallback) {
+	public setCallbackFunction(callback: Phaser.EasyStarCallback) {
 		this._callback = callback;
 	}
 
@@ -92,4 +92,4 @@ Phaser.Plugin.PathFinderPlugin = class PathFinderPlugin extends Phaser.Plugin {
 		this._easyStar.calculate();
 	}
 
-};
+}

@@ -1,3 +1,4 @@
+import { PathFinderPlugin } from '../plugins/PathFinderPlugin';
 import { GameState } from './GameState';
 
 export class BootState extends GameState {
@@ -7,7 +8,7 @@ export class BootState extends GameState {
 	}
 
 	public create() {
-		this.game.pathFinder = this.game.plugins.add(Phaser.Plugin.PathFinderPlugin);
+		this.game.pathFinder = this.game.plugins.add(PathFinderPlugin);
 		this.game.state.start('preloader');
 	}
 }

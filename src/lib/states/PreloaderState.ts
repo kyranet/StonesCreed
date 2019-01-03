@@ -1,4 +1,3 @@
-import '../plugins/PathFinderPlugin';
 import { GameState } from './GameState';
 
 export class PreloaderState extends GameState {
