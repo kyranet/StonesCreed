@@ -2,6 +2,7 @@ import { GameManager } from '../../managers/GameManager';
 import { Route } from '../../misc/Route';
 import { Direction, EnemyState, PlayerState } from '../../misc/types';
 import { Character, ICharacterSerialized } from './Character';
+import { Player } from './Player';
 
 export class Enemy extends Character {
 	public route = new Route();
@@ -10,6 +11,7 @@ export class Enemy extends Character {
 	protected isTarget = false;
 	protected onRoute = true;
 	protected reverse = false;
+	protected playerLastKnownPosition: Phaser.Point = null;
 
 	public constructor(gameManager: GameManager, x: number, y: number) {
 		super(gameManager, x, y, 'enemy');
@@ -23,7 +25,9 @@ export class Enemy extends Character {
 	public update() {
 		super.update();
 
-		this.detectPlayer();
+		if (!this.detectPlayer() && this.state === EnemyState.pursuit) {
+			this.onEndDetection();
+		}
 		if (this.onRoute && this.route.size > 1) {
 			const [x, y] = this.route.get(this.routeAt);
 			if (!this.moveTowards(x, y)) {
@@ -145,21 +149,34 @@ export class Enemy extends Character {
 		console.log(`I am near, and I'm seeing you at ${Math.floor(direction * 180 / Math.PI)} degrees from me.`);
 
 		// Call onDetection
-		this.onDetection();
+		this.onBeginDetection(player);
 
 		return true;
 	}
 
-	private onDetection() {
+	private onBeginDetection(player: Player) {
 		// TODO: Set state to pursuit
-		// TODO: Implement "Last Known Location"
 		// TODO: Implement this method
 		// 1. Show a !
+		this.playerLastKnownPosition = player.position.clone();
 		// 2. Pause the character for a few milliseconds
+		this.onDetection(player);
+	}
+
+	private onDetection(player: Player) {
+		player.position.clone(this.playerLastKnownPosition);
 		// 3. Calculate the shortest path to the player
 		// 4. Walk one tile
 		// 5. Repeat from the step 3 until the enemy does not find
 		//    the player anymore
+	}
+
+	private onEndDetection() {
+		// TODO: Wait for 1 second before running the rest of the logic
+		// TODO: Implement EasyStar to make the Enemy go back to the
+		// original route
+		this.state = EnemyState.walk;
+		this.playerLastKnownPosition = null;
 	}
 
 }
