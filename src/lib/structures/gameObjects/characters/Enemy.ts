@@ -1,6 +1,6 @@
 import { GameManager } from '../../managers/GameManager';
 import { Route } from '../../misc/Route';
-import { Direction, EnemyState } from '../../misc/types';
+import { Direction, EnemyState, PlayerState } from '../../misc/types';
 import { Character, ICharacterSerialized } from './Character';
 
 export class Enemy extends Character {
@@ -127,10 +127,21 @@ export class Enemy extends Character {
 		const inPOV = Math.abs(direction) < this.pov / 2;
 		if (!inPOV) return false;
 
-		// TODO: Add collision/obstacle detection
-		// this.gameManager.state.obstacleLayer.layer.data;
+		// Draw a line between the enemy and the player
+		const line = new Phaser.Line(
+			this.position.x + this.scale.x / 2,
+			this.position.y + this.scale.y / 2,
+			player.position.x + player.scale.x / 2,
+			player.position.y + player.scale.y / 2);
+		const tiles = this.gameManager.state.obstacleLayer.getRayCastTiles(line, 4, true, false)
+			.filter((tile) => tile.index !== -1);
+
+		// If there is a tile or more between the enemy and the player,
+		// it won't "see" the player unless it's running
+		if (tiles.length && player.state !== PlayerState.run) return false;
 
 		// TODO: Remove console.log once all changes are done
+		console.log('Tiles found', tiles);
 		console.log(`I am near, and I'm seeing you at ${Math.floor(direction * 180 / Math.PI)} degrees from me.`);
 
 		// Call onDetection
@@ -140,7 +151,15 @@ export class Enemy extends Character {
 	}
 
 	private onDetection() {
+		// TODO: Set state to pursuit
+		// TODO: Implement "Last Known Location"
 		// TODO: Implement this method
+		// 1. Show a !
+		// 2. Pause the character for a few milliseconds
+		// 3. Calculate the shortest path to the player
+		// 4. Walk one tile
+		// 5. Repeat from the step 3 until the enemy does not find
+		//    the player anymore
 	}
 
 }
