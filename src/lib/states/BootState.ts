@@ -7,6 +7,7 @@ export class BootState extends GameState {
 	}
 
 	public create() {
+		this.game.pathFinder = this.game.plugins.add(Phaser.Plugin.PathFinderPlugin);
 		this.game.state.start('preloader');
 	}
 }
