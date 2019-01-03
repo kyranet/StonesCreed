@@ -44,6 +44,9 @@ export class PlayState extends GameState {
 			}
 		};
 		document.addEventListener('keydown', this.escListener);
+
+		// Set up the path finder
+		this.game.pathFinder.setGrid(this.obstacleLayer.layer.data, [-1]);
 	}
 
 	public shutdown() {

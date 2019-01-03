@@ -3,7 +3,7 @@
 
 export class PathFinderPlugin extends Phaser.Plugin {
 
-	private _easyStar = new EasyStar.js();
+	private readonly _easyStar = new EasyStar.js();
 	private _grid: number[][] = null;
 	private _callback: Phaser.EasyStarCallback = null;
 	private _prepared = false;
@@ -71,9 +71,7 @@ export class PathFinderPlugin extends Phaser.Plugin {
 	 * @param to array 0: x-coords, 1: y-coords ([x,y])
 	 */
 	public preparePathCalculation(from: [number, number], to: [number, number]) {
-		if (this._callback === null || typeof this._callback !== 'function') {
-			throw new Error('No Callback set!');
-		}
+		if (!this._callback) throw new Error('No Callback set!');
 
 		const [startX, startY] = from;
 		const [destinationX, destinationY] = to;
