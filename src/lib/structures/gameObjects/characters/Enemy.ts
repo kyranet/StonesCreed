@@ -160,7 +160,6 @@ export class Enemy extends Character {
 	}
 
 	private onBeginDetection(player: Player) {
-		// TODO: 1. Show a !
 		this.pathRoute.length = 0;
 		this.setState(EnemyState.pursuit);
 		this.preparePathRoute(player.body.position);
