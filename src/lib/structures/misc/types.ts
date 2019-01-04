@@ -27,6 +27,11 @@ export enum HidingType {
 }
 
 export const CharacterState: ICharacterState = {
+	0: 'dead',
+	1: 'dying',
+	2: 'run',
+	3: 'stand',
+	4: 'walk',
 	dead: 0,
 	dying: 1,
 	run: 2,
@@ -36,19 +41,31 @@ export const CharacterState: ICharacterState = {
 
 export const PlayerState: IPlayerState = {
 	...CharacterState,
+	5: 'hidden',
 	hidden: 5
 };
 
 export const EnemyState: IEnemyState = {
 	...CharacterState,
-	onRoute: 6,
-	pursuit: 7
+	6: 'backToRoute',
+	7: 'onRoute',
+	8: 'pursuit',
+	9: 'searching',
+	backToRoute: 6,
+	onRoute: 7,
+	pursuit: 8,
+	searching: 9
 };
 
 /**
  * The character states
  */
 interface ICharacterState {
+	0: 'dead';
+	1: 'dying';
+	2: 'run';
+	3: 'stand';
+	4: 'walk';
 	dead: 0;
 	dying: 1;
 	run: 2;
@@ -60,6 +77,7 @@ interface ICharacterState {
  * The player states
  */
 interface IPlayerState extends ICharacterState {
+	5: 'hidden';
 	hidden: 5;
 }
 
@@ -67,6 +85,12 @@ interface IPlayerState extends ICharacterState {
  * The enemy states
  */
 interface IEnemyState extends ICharacterState {
-	onRoute: 6;
-	pursuit: 7;
+	6: 'backToRoute';
+	7: 'onRoute';
+	8: 'pursuit';
+	9: 'searching';
+	backToRoute: 6;
+	onRoute: 7;
+	pursuit: 8;
+	searching: 9;
 }

@@ -1,3 +1,4 @@
+import { TILE_SIZE } from '../../../util/constants';
 import { GameManager } from '../../managers/GameManager';
 import { Route } from '../../misc/Route';
 import { Direction, EnemyState, PlayerState } from '../../misc/types';
@@ -9,9 +10,11 @@ export class Enemy extends Character {
 	protected routeAt = 1;
 	protected pov = 80 * (Math.PI / 180);
 	protected isTarget = false;
-	protected onRoute = true;
-	protected reverse = false;
-	protected playerLastKnownPosition: Phaser.Point = null;
+	private reverse = false;
+	private playerLastKnownPosition: Phaser.Point = null;
+	private pathRoute: Phaser.Point[] = [];
+	private updatedRoute = true;
+	private timer: Phaser.TimerEvent = null;
 
 	public constructor(gameManager: GameManager, x: number, y: number) {
 		super(gameManager, x, y, 'enemy');
@@ -25,31 +28,55 @@ export class Enemy extends Character {
 	public update() {
 		super.update();
 
-		if (!this.detectPlayer() && this.state === EnemyState.pursuit) {
-			this.onEndDetection();
+		// If it's dying or dead, do nothing
+		if (this.state === EnemyState.dying || this.state === EnemyState.dead) {
+			return;
 		}
-		if (this.onRoute && this.route.size > 1) {
-			const [x, y] = this.route.get(this.routeAt);
-			if (!this.moveTowards(x, y)) {
+
+		// If it's still on pursuit, call onDetection
+		if (this.state === EnemyState.pursuit) {
+			this.onDetection(this.gameManager.player);
+			return;
+		}
+
+		// If it detected the player, begin pursuit
+		if (this.detectPlayer()) {
+			this.onBeginDetection(this.gameManager.player);
+			return;
+		}
+
+		// If it's searching, let the concurrent system operate
+		if (this.state === EnemyState.searching) {
+			return;
+		}
+
+		if (this.state === EnemyState.backToRoute && this.pathRoute.length) {
+			if (!this.moveTowards(this.pathRoute[0])) {
+				this.pathRoute.shift();
+				if (!this.pathRoute.length) this.setState(EnemyState.onRoute);
+			}
+			return;
+		}
+
+		if (this.route.size > 1) {
+			if (!this.moveTowards(this.route.get(this.routeAt))) {
 				if (this.routeAt === (this.reverse ? 0 : this.route.size - 1)) this.reverse = !this.reverse;
 				this.routeAt += this.reverse ? -1 : 1;
 			}
+			return;
 		}
+
+		this.stand().setState(EnemyState.stand);
 	}
 
-	public kill() {
-		this.onRoute = false;
-		return super.kill();
-	}
-
-	public moveTowards(x: number, y: number) {
-		const nextDirection = this.findNextDirection(x, y);
+	public moveTowards(point: Phaser.Point) {
+		const nextDirection = this.findNextDirection(point.x, point.y);
 		if (nextDirection === null) {
 			this.stand();
 			return false;
 		}
 
-		this.changeDirection(nextDirection).walk();
+		this.setDirection(nextDirection).walk();
 		return true;
 	}
 
@@ -64,22 +91,22 @@ export class Enemy extends Character {
 	}
 
 	public findNextXDirection(x: number) {
-		if (this.position.x === x) return null;
+		if (this.body.position.x === x) return null;
 
-		const diff = this.position.x - x;
+		const diff = this.body.position.x - x;
 		if (diff < -2) return Direction.right;
 		if (diff > 2) return Direction.left;
-		this.setPosition(x, this.position.y);
+		this.setPosition(x, this.body.position.y);
 		return null;
 	}
 
 	public findNextYDirection(y: number) {
-		if (this.position.y === y) return null;
+		if (this.body.position.y === y) return null;
 
-		const diff = this.position.y - y;
+		const diff = this.body.position.y - y;
 		if (diff < -2) return Direction.down;
 		if (diff > 2) return Direction.up;
-		this.setPosition(this.position.x, y);
+		this.setPosition(this.body.position.x, y);
 		return null;
 	}
 
@@ -88,21 +115,11 @@ export class Enemy extends Character {
 		return this;
 	}
 
-	public chase() {
-		// TODO: How do we know the Player's position?
-		// TODO: Implement actual logic
-		this.setState(EnemyState.pursuit);
-
-		// TODO: Implement method to reset pursuit to onRoute, including
-		// the usage of Dijkstra's algorithm to go back to the previous route.
-		// TODO: Add method to pinpoint positions to the route
-	}
-
 	public fromJSON(data: IEnemySerialized) {
 		super.fromJSON(data);
 		this.isTarget = data.isTarget;
 		this.pov = data.pov;
-		this.route.set(data.route);
+		this.route.set(data.route.map((point) => new Phaser.Point(point[0], point[1])));
 		return this;
 	}
 
@@ -117,6 +134,116 @@ export class Enemy extends Character {
 	}
 
 	private detectPlayer() {
+		// If the enemy doesn't see the player, return false
+		if (!this.seesPlayer()) return false;
+		const { player } = this.gameManager;
+
+		// Draw a line between the enemy and the player
+		const line = new Phaser.Line(
+			this.body.position.x + this.body.halfWidth,
+			this.body.position.y + this.body.halfHeight,
+			player.body.position.x + player.body.halfWidth,
+			player.body.position.y + player.body.halfHeight);
+		const tiles = this.gameManager.state.obstacleLayer.getRayCastTiles(line, 4, true, false)
+			.filter((tile) => tile.index !== -1);
+
+		// If there is a tile or more between the enemy and the player,
+		// it won't "see" the player unless it's running
+		if (tiles.length && player.state !== PlayerState.run) return false;
+
+		// Call onDetection
+		this.onBeginDetection(player);
+
+		return true;
+	}
+
+	private onBeginDetection(player: Player) {
+		// TODO: 1. Show a !
+		this.pathRoute.length = 0;
+		this.setState(EnemyState.pursuit);
+		this.preparePathRoute(player.body.position);
+		this.playerLastKnownPosition = player.position.clone();
+		if (this.timer) {
+			this.game.time.events.remove(this.timer);
+			this.timer = null;
+		}
+	}
+
+	private onDetection(player: Player) {
+		// If the player is already in the current path,
+		if (this.pathRoute.length && !this.moveTowards(this.pathRoute[0])) {
+			// If the enemy sees the player, prepare the new route
+			if (this.seesPlayer()) {
+				player.body.position.clone(this.playerLastKnownPosition);
+				this.preparePathRoute(this.playerLastKnownPosition);
+			}
+			// If the route has more than one tile, shift until there's only one element
+			if (this.pathRoute.length > 1) this.pathRoute.shift();
+			// If the enemy reached LKP, call end detection
+			else this.onEndDetection();
+		}
+		// 3. Calculate the shortest path to the player
+		// 4. Walk one tile
+		// 5. Repeat from the step 3 until the enemy does not find
+		//    the player anymore
+	}
+
+	private onEndDetection() {
+		if (this.timer) return;
+
+		// Cleans up the LKP and path route
+		this.playerLastKnownPosition = null;
+		this.pathRoute.length = 0;
+		// Set state to searching, and holds on for a second
+		this.setState(EnemyState.searching);
+		let repeat = 0;
+		this.timer = this.game.time.events.repeat(Phaser.Timer.SECOND, 4, () => {
+			// In the last iteration
+			if (++repeat === 4) {
+				this.timer = null;
+				// After a second has elapsed, change state to backToRoute and
+				// calculate the path route to the last point from the route
+				this.setState(EnemyState.backToRoute);
+				this.preparePathRoute(this.route.get(this.routeAt));
+			} else {
+				// Rotate the character in three directions
+				let next: Direction;
+				switch (this.direction) {
+					case Direction.down: next = Direction.up; break;
+					case Direction.left: next = Direction.right; break;
+					case Direction.up: next = Direction.left; break;
+					default: next = Direction.down;
+				}
+				this.setDirection(next);
+				this.animations.play(`stand.${Direction[this.direction]}`, 0);
+			}
+		});
+	}
+
+	private preparePathRoute(point: Phaser.Point) {
+		// If the route has not been updated yet, cancel the preparation
+		if (!this.updatedRoute) return;
+
+		this.updatedRoute = false;
+		this.game.pathFinder.setCallbackFunction((route) => {
+			this.updatedRoute = true;
+			// If null, end the detection
+			if (route) {
+				this.pathRoute = route.map((value) => new Phaser.Point(value.x * TILE_SIZE, value.y * TILE_SIZE));
+				this.pathRoute.shift();
+			} else {
+				this.onEndDetection();
+			}
+		});
+		const eTiles = this.positionInTiles();
+		this.game.pathFinder.preparePathCalculation(
+			[Math.floor(eTiles.x), Math.floor(eTiles.y)],
+			[Math.floor(point.x / TILE_SIZE), Math.floor(point.y / TILE_SIZE)]
+		);
+		this.game.pathFinder.calculatePath();
+	}
+
+	private seesPlayer() {
 		const { player } = this.gameManager;
 
 		// If there is no player or it is hidden, return false
@@ -129,54 +256,7 @@ export class Enemy extends Character {
 		// If the player is not inside the POV radius, return false
 		const direction = this.relativeAngleTo(player);
 		const inPOV = Math.abs(direction) < this.pov / 2;
-		if (!inPOV) return false;
-
-		// Draw a line between the enemy and the player
-		const line = new Phaser.Line(
-			this.position.x + this.scale.x / 2,
-			this.position.y + this.scale.y / 2,
-			player.position.x + player.scale.x / 2,
-			player.position.y + player.scale.y / 2);
-		const tiles = this.gameManager.state.obstacleLayer.getRayCastTiles(line, 4, true, false)
-			.filter((tile) => tile.index !== -1);
-
-		// If there is a tile or more between the enemy and the player,
-		// it won't "see" the player unless it's running
-		if (tiles.length && player.state !== PlayerState.run) return false;
-
-		// TODO: Remove console.log once all changes are done
-		console.log('Tiles found', tiles);
-		console.log(`I am near, and I'm seeing you at ${Math.floor(direction * 180 / Math.PI)} degrees from me.`);
-
-		// Call onDetection
-		this.onBeginDetection(player);
-
-		return true;
-	}
-
-	private onBeginDetection(player: Player) {
-		// TODO: Set state to pursuit
-		// TODO: Implement this method
-		// 1. Show a !
-		this.playerLastKnownPosition = player.position.clone();
-		// 2. Pause the character for a few milliseconds
-		this.onDetection(player);
-	}
-
-	private onDetection(player: Player) {
-		player.position.clone(this.playerLastKnownPosition);
-		// 3. Calculate the shortest path to the player
-		// 4. Walk one tile
-		// 5. Repeat from the step 3 until the enemy does not find
-		//    the player anymore
-	}
-
-	private onEndDetection() {
-		// TODO: Wait for 1 second before running the rest of the logic
-		// TODO: Implement EasyStar to make the Enemy go back to the
-		// original route
-		this.state = EnemyState.walk;
-		this.playerLastKnownPosition = null;
+		return inPOV;
 	}
 
 }

@@ -1,7 +1,7 @@
 /**
  * The array route data
  */
-export interface ArrayRoute extends Array<[number, number]> { }
+export interface ArrayRoute extends Array<Phaser.Point> { }
 
 export class Route {
 	private route: ArrayRoute = [];
@@ -29,9 +29,9 @@ export class Route {
 	 * @param y The new y position
 	 */
 	public add(x: number, y: number): this;
-	public add(position: [number, number]): this;
-	public add(x: number | [number, number], y?: number) {
-		this.route.push(typeof x === 'number' ? [x, y] : x);
+	public add(point: Phaser.Point): this;
+	public add(x: number | Phaser.Point, y?: number) {
+		this.route.push(typeof x === 'number' ? new Phaser.Point(x, y) : x);
 		return this;
 	}
 
@@ -58,7 +58,7 @@ export class Route {
 	}
 
 	public toJSON() {
-		return this.route.slice();
+		return this.route.map((point) => [point.x, point.y]) as [number, number][];
 	}
 
 }

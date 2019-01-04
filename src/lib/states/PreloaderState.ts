@@ -9,7 +9,6 @@ export class PreloaderState extends GameState {
 		this.loadingBar.anchor.setTo(0, 0.5);
 		this.load.setPreloadSprite(this.loadingBar);
 
-		// TODO: load here the assets for the game
 		this.game.load.spritesheet('player', 'images/player.png', 48, 96);
 		this.game.load.spritesheet('enemy', 'images/enemy.png', 48, 96);
 		this.game.load.tilemap('Level-0', 'json/Level-0.json', null, Phaser.Tilemap.TILED_JSON);

@@ -29,8 +29,8 @@ export class GameObject extends Phaser.Sprite {
 	 * @param y The new y position
 	 */
 	public setPosition(x: number, y: number) {
-		this.position.x = x;
-		this.position.y = y;
+		this.body.position.x = x;
+		this.body.position.y = y;
 		return this;
 	}
 
@@ -87,11 +87,11 @@ export class GameObject extends Phaser.Sprite {
 	}
 
 	public positionInTiles() {
-		return new Phaser.Point(this.position.x / TILE_SIZE, this.position.y / TILE_SIZE);
+		return new Phaser.Point(this.body.position.x / TILE_SIZE, this.body.position.y / TILE_SIZE);
 	}
 
 	public distanceTo(gameObject: GameObject) {
-		return this.position.distance(gameObject.position);
+		return this.body.position.distance(gameObject.body.position);
 	}
 
 	public distanceInTilesTo(gameObject: GameObject) {
@@ -99,7 +99,7 @@ export class GameObject extends Phaser.Sprite {
 	}
 
 	public angleTo(gameObject: GameObject) {
-		return Math.atan2(gameObject.position.y - this.position.y, gameObject.position.x - this.position.x);
+		return Math.atan2(gameObject.body.position.y - this.body.position.y, gameObject.body.position.x - this.body.position.x);
 	}
 
 	public static factory = new GameObjectFactory();

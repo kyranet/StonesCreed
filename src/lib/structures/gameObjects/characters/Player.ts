@@ -26,6 +26,7 @@ export class Player extends Character {
 	}
 
 	public update() {
+		super.update();
 		if (Date.now() < this.movementRefresh) return;
 
 		this.directions.down = this.cursorKeys.down.isDown;
@@ -37,15 +38,15 @@ export class Player extends Character {
 		const running = keyboard.isDown(Phaser.Keyboard.SHIFT);
 
 		if (this.directions.down !== this.directions.up) {
-			this.direction = this.directions.down ? Direction.down : Direction.up;
-			if (running) this.run();
-			else this.walk();
+			this.setDirection(this.directions.down ? Direction.down : Direction.up);
+			if (running) this.setState(PlayerState.run).run();
+			else this.setState(PlayerState.walk).walk();
 		} else if (this.directions.left !== this.directions.right) {
-			this.direction = this.directions.left ? Direction.left : Direction.right;
-			if (running) this.run();
-			else this.walk();
+			this.setDirection(this.directions.left ? Direction.left : Direction.right);
+			if (running) this.setState(PlayerState.run).run();
+			else this.setState(PlayerState.walk).walk();
 		} else {
-			this.stand();
+			this.stand().setState(PlayerState.stand);
 		}
 
 		if (keyboard.isDown(Phaser.Keyboard.X)) {

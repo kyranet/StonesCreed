@@ -13,7 +13,7 @@ export class Character extends GameObject {
 
 	public constructor(gameManager: GameManager, x: number, y: number, key?: string, frame?: string) {
 		super(gameManager, x, y, key, frame);
-		this.body.setSize(this.width * 0.9, this.height * 0.3, 0, this.height * 0.6);
+		this.body.setSize(this.width * 0.9, this.height * 0.3, (this.width * 0.1) / 2, this.height * 0.6);
 
 		this.animations.add('stand.down', [0]);
 		this.animations.add('move.down', [1, 2, 3, 4]);
@@ -74,7 +74,6 @@ export class Character extends GameObject {
 	 * Sets the state of this character to walk
 	 */
 	public walk() {
-		this.setState(CharacterState.walk);
 		this.animations.play(`move.${Direction[this.direction]}`, 5);
 		this.updateVelocity(this.walkSpeed);
 		return this;
@@ -84,7 +83,6 @@ export class Character extends GameObject {
 	 * Sets the state of this character to run
 	 */
 	public run() {
-		this.setState(CharacterState.run);
 		this.animations.play(`move.${Direction[this.direction]}`, 8);
 		this.updateVelocity(this.runSpeed);
 		return this;
@@ -94,7 +92,6 @@ export class Character extends GameObject {
 	 * Sets the state of this character to stand, changing
 	 */
 	public stand() {
-		this.setState(CharacterState.stand);
 		this.animations.play(`stand.${Direction[this.direction]}`, 0);
 		this.animations.stop();
 		this.setVelocity(0, 0);
@@ -105,7 +102,7 @@ export class Character extends GameObject {
 	 * Change the direction for this character
 	 * @param direction The new direction
 	 */
-	public changeDirection(direction: Direction) {
+	public setDirection(direction: Direction) {
 		this.direction = direction;
 		return this;
 	}
