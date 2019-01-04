@@ -2,6 +2,7 @@ import { TILE_SIZE } from '../../../util/constants';
 import { GameManager } from '../../managers/GameManager';
 import { Route } from '../../misc/Route';
 import { Direction, EnemyState, PlayerState } from '../../misc/types';
+import { SpeechBubble } from '../objects/SpeechBubble';
 import { Character, ICharacterSerialized } from './Character';
 import { Player } from './Player';
 
@@ -10,6 +11,7 @@ export class Enemy extends Character {
 	protected routeAt = 1;
 	protected pov = 80 * (Math.PI / 180);
 	protected isTarget = false;
+	protected bubble: SpeechBubble = this.addChild(new SpeechBubble(this.gameManager, this.width / 10, -25).hide()) as SpeechBubble;
 	private reverse = false;
 	private playerLastKnownPosition: Phaser.Point = null;
 	private pathRoute: Phaser.Point[] = [];
@@ -163,6 +165,7 @@ export class Enemy extends Character {
 		this.setState(EnemyState.pursuit);
 		this.preparePathRoute(player.body.position);
 		this.playerLastKnownPosition = player.position.clone();
+		this.bubble.show().display('!').fadeIn(1000);
 		if (this.timer) {
 			this.game.time.events.remove(this.timer);
 			this.timer = null;
@@ -197,10 +200,12 @@ export class Enemy extends Character {
 		// Set state to searching, and holds on for a second
 		this.setState(EnemyState.searching);
 		let repeat = 0;
+		this.bubble.show().display('?');
 		this.timer = this.game.time.events.repeat(Phaser.Timer.SECOND, 4, () => {
 			// In the last iteration
 			if (++repeat === 4) {
 				this.timer = null;
+				this.bubble.hide();
 				// After a second has elapsed, change state to backToRoute and
 				// calculate the path route to the last point from the route
 				this.setState(EnemyState.backToRoute);
