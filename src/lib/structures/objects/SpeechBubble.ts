@@ -1,4 +1,4 @@
-import { GameManager } from '../../managers/GameManager';
+import { GameManager } from '../managers/GameManager';
 
 export class SpeechBubble extends Phaser.Sprite {
 

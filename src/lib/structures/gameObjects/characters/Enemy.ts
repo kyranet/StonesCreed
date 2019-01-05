@@ -2,7 +2,7 @@ import { TILE_SIZE } from '../../../util/constants';
 import { GameManager } from '../../managers/GameManager';
 import { Route } from '../../misc/Route';
 import { Direction, EnemyState, PlayerState } from '../../misc/types';
-import { SpeechBubble } from '../objects/SpeechBubble';
+import { SpeechBubble } from '../../objects/SpeechBubble';
 import { Character, ICharacterSerialized } from './Character';
 import { Player } from './Player';
 
@@ -11,7 +11,7 @@ export class Enemy extends Character {
 	protected routeAt = 1;
 	protected pov = 80 * (Math.PI / 180);
 	protected isTarget = false;
-	protected bubble: SpeechBubble = this.addChild(new SpeechBubble(this.gameManager, this.width / 10, -25).hide()) as SpeechBubble;
+	protected bubble = this.addChild(new SpeechBubble(this.gameManager, this.width / 10, -25).hide()) as SpeechBubble;
 	private reverse = false;
 	private playerLastKnownPosition: Phaser.Point = null;
 	private pathRoute: Phaser.Point[] = [];
