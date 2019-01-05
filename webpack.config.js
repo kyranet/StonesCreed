@@ -1,8 +1,9 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const production = process.env.NODE_ENV === 'production';
 
 module.exports = {
-	mode: 'production',
-	devtool: 'inline-source-map',
+	mode: production ? 'production' : 'development',
+	devtool: production ? 'none' : 'source-map',
 	entry: './src/lib/main.ts',
 	output: {
 		filename: 'js/bundle.min.js'
