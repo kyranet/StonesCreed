@@ -1,19 +1,23 @@
 {
 	"compileOnSave": true,
 	"compilerOptions": {
+		"allowUnreachableCode": false,
 		"alwaysStrict": true,
-		"experimentalDecorators": true,
 		"lib": ["esnext", "dom"],
 		"module": "none",
-		"noUnusedParameters": true,
-		"sourceMap": true,
+		"newLine": "LF",
+		"noEmitOnError": true,
+		"noImplicitReturns": true,
+		"noResolve": true,
 		"noUnusedLocals": true,
+		"noUnusedParameters": true,
 		"removeComments": true,
+		"sourceMap": true,
 		"target": "es2015"
 	},
 	"exclude": [
 		"node_modules",
-		"bin",
+		"dist",
 		"examples",
 		"scripts"
 	],

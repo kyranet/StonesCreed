@@ -73,7 +73,6 @@ export class Player extends Character {
 	}
 
 	public collides(gameObject: Character) {
-		if (!(gameObject instanceof Character)) return;
 		if (this.actions.kill) this.attack(gameObject);
 		else if (this.actions.interact) gameObject.interact(this);
 		return true;

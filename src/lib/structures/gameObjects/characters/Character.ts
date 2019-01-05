@@ -49,7 +49,7 @@ export class Character extends GameObject {
 	 */
 	public attack(character: Character) {
 		const now = Date.now();
-		if (now < this.attackRefresh) return;
+		if (now < this.attackRefresh) return this;
 		this.attackRefresh = Date.now() + this.attackCooldown;
 		character.damage(this.strength);
 		this.animations.play(`kill.${Direction[this.direction]}`, (1000 / this.attackCooldown) * 3);
