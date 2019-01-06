@@ -1,5 +1,7 @@
 [
 	{
+		"frame": 0,
+		"key": "player",
 		"name": "player",
 		"position": {
 			"x": 75,
@@ -17,6 +19,8 @@
 		"hidingSpot": null
 	},
 	{
+		"frame": 0,
+		"key": "enemy",
 		"name": "enemy",
 		"position": {
 			"x": 336,
@@ -31,7 +35,6 @@
 		"runSpeed": 150,
 		"strength": 2,
 		"walkSpeed": 95,
-		"isTarget": false,
 		"pathRoute": [],
 		"playerLastKnownPosition": null,
 		"pov": 1.3962,
