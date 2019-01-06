@@ -2,6 +2,7 @@ import { GameManager } from '../structures/managers/GameManager';
 import { GameState } from './GameState';
 
 export class PlayState extends GameState {
+
 	public gameManager: GameManager = null;
 	public tilemaps: Map<number, Phaser.Tilemap> = new Map();
 	public obstacleLayer: Phaser.TilemapLayer = null;

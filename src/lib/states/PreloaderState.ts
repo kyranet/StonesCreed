@@ -2,7 +2,7 @@ import { GameState } from './GameState';
 
 export class PreloaderState extends GameState {
 
-	private loadingBar: Phaser.Sprite;
+	private loadingBar: Phaser.Sprite = null;
 
 	public preload() {
 		this.loadingBar = this.game.add.sprite(0, 240, 'preloader_bar');
@@ -21,4 +21,5 @@ export class PreloaderState extends GameState {
 	public create() {
 		this.game.state.start('menu');
 	}
+
 }

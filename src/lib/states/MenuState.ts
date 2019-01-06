@@ -2,6 +2,7 @@ import { GameState } from './GameState';
 import { PlayState } from './PlayState';
 
 export class MenuState extends GameState {
+
 	public texts: Phaser.Text[] = [];
 	public logo: Phaser.Sprite = null;
 
