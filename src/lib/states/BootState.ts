@@ -3,10 +3,10 @@ import { LOADING_POSITION, WIN_WIDTH } from '../util/constants';
 import { GameState } from './GameState';
 
 export class BootState extends GameState {
+
 	private loadingBar: Phaser.Graphics = null;
 
 	public preload() {
-		// this.loadingBar = this.game.add.sprite(0, 240, 'preloader_bar');
 		this.loadingBar = this.game.add.graphics(LOADING_POSITION.x, LOADING_POSITION.y);
 		this.loadingBar.beginFill(0xFFFFFF);
 
