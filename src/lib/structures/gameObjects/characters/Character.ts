@@ -3,6 +3,7 @@ import { CharacterState, Direction } from '../../misc/types';
 import { GameObject, IGameObjectSerialized } from '../GameObject';
 
 export class Character extends GameObject {
+
 	public walkSpeed = 0;
 	public runSpeed = 0;
 	public state: number = CharacterState.stand;
