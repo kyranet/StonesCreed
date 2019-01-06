@@ -7,6 +7,7 @@ import { Character, ICharacterSerialized } from './Character';
 import { Player } from './Player';
 
 export class Enemy extends Character {
+
 	public route = new Route();
 	protected routeAt = 1;
 	protected pov = 80 * (Math.PI / 180);
@@ -122,6 +123,8 @@ export class Enemy extends Character {
 		this.isTarget = data.isTarget;
 		this.pov = data.pov;
 		this.route.set(data.route.map((point) => new Phaser.Point(point[0], point[1])));
+		this.pathRoute = data.pathRoute.map((point) => new Phaser.Point(point[0], point[1]));
+		this.playerLastKnownPosition = data.playerLastKnownPosition ? new Phaser.Point(data.playerLastKnownPosition[0], data.playerLastKnownPosition[1]) : null;
 		return this;
 	}
 
@@ -129,7 +132,10 @@ export class Enemy extends Character {
 		return {
 			...super.toJSON(),
 			isTarget: this.isTarget,
+			pathRoute: this.pathRoute.map((point) => [point.x, point.y] as [number, number]),
+			playerLastKnownPosition: this.playerLastKnownPosition ? [this.playerLastKnownPosition.x, this.playerLastKnownPosition.y] : null,
 			pov: this.pov,
+			reverse: this.reverse,
 			route: this.route.toJSON(),
 			type: 'Enemy'
 		};
@@ -272,4 +278,7 @@ export interface IEnemySerialized extends ICharacterSerialized {
 	isTarget: boolean;
 	pov: number;
 	route: [number, number][];
+	reverse: boolean;
+	playerLastKnownPosition: [number, number] | null;
+	pathRoute: [number, number][];
 }
