@@ -23,11 +23,7 @@ export class BootState extends GameState {
 		this.game.load.spritesheet('player', 'images/player.png', 48, 96);
 		this.game.load.spritesheet('enemy', 'images/enemy.png', 48, 96);
 		this.game.load.spritesheet('enemyTarget', 'images/enemy-target.png', 48, 96);
-<<<<<<< HEAD
-		this.game.load.atlas('objects', 'images/objects.png', 'images/objects_atlas.json', Phaser.Loader.TEXTURE_ATLAS_JSON_ARRAY);
-=======
 		this.game.load.spritesheet('objects', 'images/objects.png', 48, 48);
->>>>>>> parent of 2d778f1... assets: added atlas for objects
 		this.game.load.tilemap('Level-0', 'json/Level-0.json', null, Phaser.Tilemap.TILED_JSON);
 		this.game.load.image('overworld', 'images/overworld.png');
 		this.game.load.image('cave', 'images/cave.png');
