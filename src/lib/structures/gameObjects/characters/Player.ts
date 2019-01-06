@@ -19,8 +19,8 @@ export class Player extends Character {
 	};
 	private movementRefresh = 0;
 
-	public constructor(gameManager: GameManager, x: number, y: number) {
-		super(gameManager, x, y, 'player');
+	public constructor(gameManager: GameManager, x: number, y: number, key?: string, frame?: number) {
+		super(gameManager, x, y, key, frame);
 		this.game.camera.follow(this, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
 		this.body.immovable = false;
 	}

@@ -12,7 +12,7 @@ export class Character extends GameObject {
 	public attackCooldown = 500;
 	protected attackRefresh = 0;
 
-	public constructor(gameManager: GameManager, x: number, y: number, key?: string, frame?: string) {
+	public constructor(gameManager: GameManager, x: number, y: number, key?: string, frame?: number) {
 		super(gameManager, x, y, key, frame);
 		this.body.setSize(this.width * 0.9, this.height * 0.3, (this.width * 0.1) / 2, this.height * 0.6);
 

@@ -1,5 +1,4 @@
 import { TILE_SIZE } from '../../../util/constants';
-import { GameManager } from '../../managers/GameManager';
 import { Route } from '../../misc/Route';
 import { Direction, EnemyState, PlayerState } from '../../misc/types';
 import { SpeechBubble } from '../../objects/SpeechBubble';
@@ -18,10 +17,6 @@ export class Enemy extends Character {
 	private pathRoute: Phaser.Point[] = [];
 	private updatedRoute = true;
 	private timer: Phaser.TimerEvent = null;
-
-	public constructor(gameManager: GameManager, x: number, y: number) {
-		super(gameManager, x, y, 'enemy');
-	}
 
 	public setTarget(isTarget: boolean) {
 		this.isTarget = isTarget;
@@ -125,6 +120,7 @@ export class Enemy extends Character {
 		this.route.set(data.route.map((point) => new Phaser.Point(point[0], point[1])));
 		this.pathRoute = data.pathRoute.map((point) => new Phaser.Point(point[0], point[1]));
 		this.playerLastKnownPosition = data.playerLastKnownPosition ? new Phaser.Point(data.playerLastKnownPosition[0], data.playerLastKnownPosition[1]) : null;
+		if (this.isTarget) this.key = 'enemyTarget';
 		return this;
 	}
 

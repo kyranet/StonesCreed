@@ -1,5 +1,7 @@
 [
 	{
+		"frame": 0,
+		"key": "player",
 		"name": "player",
 		"position": {
 			"x": 75,
@@ -17,6 +19,8 @@
 		"hidingSpot": null
 	},
 	{
+		"frame": 0,
+		"key": "enemy",
 		"name": "enemy",
 		"position": {
 			"x": 336,
