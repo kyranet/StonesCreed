@@ -37,7 +37,7 @@ export class BootState extends GameState {
 			this.loadingBar.destroy(true);
 			this.loadingBar = null;
 		}
-		return super.shutdown(game);
+		super.shutdown(game);
 	}
 
 }
