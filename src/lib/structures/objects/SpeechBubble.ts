@@ -10,9 +10,9 @@ export class SpeechBubble extends Phaser.Sprite {
 		this.game.add.existing(this);
 		this.smoothed = false;
 
-		this.animations.add('...', [11, 29, 30, 12], 2);
-		this.animations.add('!', [47], 0);
-		this.animations.add('?', [48], 0);
+		this.animations.add('...', [0, 1, 2, 3], 2);
+		this.animations.add('!', [4], 0);
+		this.animations.add('?', [5], 0);
 	}
 
 	public hide() {
