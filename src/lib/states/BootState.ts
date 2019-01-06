@@ -23,7 +23,8 @@ export class BootState extends GameState {
 		this.game.load.spritesheet('player', 'images/player.png', 48, 96);
 		this.game.load.spritesheet('enemy', 'images/enemy.png', 48, 96);
 		this.game.load.spritesheet('enemyTarget', 'images/enemy-target.png', 48, 96);
-		this.game.load.spritesheet('objects', 'images/objects.png', 48, 48);
+		this.game.load.spritesheet('speechBubble', 'images/speechBubble.png', 48, 48);
+		this.game.load.spritesheet('healthBar', 'images/healthBar.png', 144, 48);
 		this.game.load.tilemap('Level-0', 'json/Level-0.json', null, Phaser.Tilemap.TILED_JSON);
 		this.game.load.image('overworld', 'images/overworld.png');
 		this.game.load.image('cave', 'images/cave.png');
