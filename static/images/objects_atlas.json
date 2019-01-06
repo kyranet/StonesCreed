@@ -1,27 +1,63 @@
-{"frames": [
-
-    {
-        "filename": "speechBubble",
-        "frame": {"x":0,"y":0,"w":96,"h":144},
-        "rotated": false,
-        "trimmed": false,
-        "spriteSourceSize": {"x":0,"y":0,"w":96,"h":144},
-        "sourceSize": {"w":96,"h":144},
-        "pivot": {"x":0.394737,"y":0.394737}
-    },
-    {
-        "filename": "healthBar",
-        "frame": {"x":0,"y":144,"w":144,"h":192},
-        "rotated": false,
-        "trimmed": false,
-        "spriteSourceSize": {"x":0,"y":0,"w":144,"h":192},
-        "sourceSize": {"w":144,"h":192},
-        "pivot": {"x":0.404762,"y":0.404762}
-    }],
+{
+    "frames": [
+        {
+            "filename": "speechBubble",
+            "frame": {
+                "x": 0,
+                "y": 0,
+                "w": 96,
+                "h": 144
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 96,
+                "h": 144
+            },
+            "sourceSize": {
+                "w": 96,
+                "h": 144
+            },
+            "pivot": {
+                "x": 0.394737,
+                "y": 0.394737
+            }
+        },
+        {
+            "filename": "healthBar",
+            "frame": {
+                "x": 0,
+                "y": 144,
+                "w": 144,
+                "h": 192
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 144,
+                "h": 192
+            },
+            "sourceSize": {
+                "w": 144,
+                "h": 192
+            },
+            "pivot": {
+                "x": 0.404762,
+                "y": 0.404762
+            }
+        }
+    ],
     "meta": {
         "image": "Objects.png",
         "format": "RGBA8888",
-        "size": {"w":144,"h":336},
+        "size": {
+            "w": 144,
+            "h": 336
+        },
         "scale": "1"
     }
-    }
+}
