@@ -5,14 +5,14 @@ export class SpeechBubble extends Phaser.Sprite {
 	private timer: Phaser.TimerEvent = null;
 
 	public constructor(public gameManager: GameManager, x: number, y: number) {
-		super(gameManager.game, x, y, 'objects', 11);
+		super(gameManager.game, x, y, 'speechBubble', 11);
 		// Add the gameobject itself to the game
 		this.game.add.existing(this);
 		this.smoothed = false;
 
-		this.animations.add('...', [0, 1, 3, 4], 2);
-		this.animations.add('!', [6], 0);
-		this.animations.add('?', [7], 0);
+		this.animations.add('...', [0, 1, 2, 3], 2);
+		this.animations.add('!', [4], 0);
+		this.animations.add('?', [5], 0);
 	}
 
 	public hide() {
