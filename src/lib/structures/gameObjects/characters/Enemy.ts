@@ -10,7 +10,6 @@ export class Enemy extends Character {
 	public route = new Route();
 	protected routeAt = 1;
 	protected pov = 80 * (Math.PI / 180);
-	protected isTarget = false;
 	protected bubble = this.addChild(new SpeechBubble(this.gameManager, this.width / 10, -25).hide()) as SpeechBubble;
 	private reverse = false;
 	private playerLastKnownPosition: Phaser.Point = null;
@@ -18,9 +17,8 @@ export class Enemy extends Character {
 	private updatedRoute = true;
 	private timer: Phaser.TimerEvent = null;
 
-	public setTarget(isTarget: boolean) {
-		this.isTarget = isTarget;
-		return this;
+	public get isTarget() {
+		return this.key === 'enemyTarget';
 	}
 
 	public update() {
@@ -115,19 +113,16 @@ export class Enemy extends Character {
 
 	public fromJSON(data: IEnemySerialized) {
 		super.fromJSON(data);
-		this.isTarget = data.isTarget;
 		this.pov = data.pov;
 		this.route.set(data.route.map((point) => new Phaser.Point(point[0], point[1])));
 		this.pathRoute = data.pathRoute.map((point) => new Phaser.Point(point[0], point[1]));
 		this.playerLastKnownPosition = data.playerLastKnownPosition ? new Phaser.Point(data.playerLastKnownPosition[0], data.playerLastKnownPosition[1]) : null;
-		if (this.isTarget) this.key = 'enemyTarget';
 		return this;
 	}
 
 	public toJSON(): IEnemySerialized {
 		return {
 			...super.toJSON(),
-			isTarget: this.isTarget,
 			pathRoute: this.pathRoute.map((point) => [point.x, point.y] as [number, number]),
 			playerLastKnownPosition: this.playerLastKnownPosition ? [this.playerLastKnownPosition.x, this.playerLastKnownPosition.y] : null,
 			pov: this.pov,
@@ -271,7 +266,6 @@ export class Enemy extends Character {
  * The serialized enemy data
  */
 export interface IEnemySerialized extends ICharacterSerialized {
-	isTarget: boolean;
 	pov: number;
 	route: [number, number][];
 	reverse: boolean;

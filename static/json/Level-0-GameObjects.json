@@ -35,7 +35,6 @@
 		"runSpeed": 150,
 		"strength": 2,
 		"walkSpeed": 95,
-		"isTarget": false,
 		"pathRoute": [],
 		"playerLastKnownPosition": null,
 		"pov": 1.3962,
